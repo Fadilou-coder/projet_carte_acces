@@ -1,4 +1,7 @@
 package com.example.projet_carte.repository;
 
-public interface AdminRepository {
+import com.example.projet_carte.model.Admin;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 }
