@@ -33,6 +33,8 @@ public class Personne {
     @Column(unique=true)
     protected String cni;
 
+    private boolean archive = false;
+
     public Personne(String prenom, String nom, String email, String phone,
                     String adresse, String cni){
         this.prenom = prenom;

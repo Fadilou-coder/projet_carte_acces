@@ -3,9 +3,8 @@ package com.example.projet_carte.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+
+import javax.persistence.*;
 import java.util.Collection;
 
 
@@ -16,10 +15,13 @@ import java.util.Collection;
 public class Visiteur {
 
     @Id
+    @GeneratedValue
     private Long id;
     private String prenom;
     private String nom;
+    @Column(unique=true)
     private String cni;
+    @Column(unique=true)
     private String numTelephone;
 
     @OneToMany(mappedBy = "visiteur")

@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.projet_carte.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtUtil {
-
-    private String SECRET_KEY = "secret";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -47,14 +46,12 @@ public class JwtUtil {
     private String createToken(Map<String, Object> claims, User userDetails) {
 
         Algorithm algorithm = Algorithm.HMAC256(SecurityConstants.SECRET);
-        String jwtToken = JWT.create()
+        return JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 8*3600*1000))
                 .withIssuer(new Date(System.currentTimeMillis()).toString())
-                .withClaim("roles", userDetails.getAuthorities().stream().map(ga->ga.getAuthority()).collect(Collectors.toList()))
+                .withClaim("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-
-        return jwtToken;
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

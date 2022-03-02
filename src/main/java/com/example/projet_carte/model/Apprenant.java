@@ -3,6 +3,7 @@ package com.example.projet_carte.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 public class Apprenant extends Personne {
 
-
+    @Column(unique=true)
     private String code;
     private String referentiel;
     private Date dateNaissance;
