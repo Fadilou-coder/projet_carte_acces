@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -46,6 +47,8 @@ public class VisiteurDto {
         visiteur.setNom(visiteurDto.getNom());
         visiteur.setCni(visiteurDto.getCni());
         visiteur.setNumTelephone(visiteurDto.getNumTelephone());
+        if (visiteurDto.getVisites() != null)
+            visiteur.setVisites(visiteurDto.getVisites().stream().map(VisiteDto::toEntity).collect(Collectors.toList()));
 
         return visiteur;
     }

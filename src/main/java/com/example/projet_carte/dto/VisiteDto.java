@@ -31,6 +31,8 @@ public class VisiteDto {
                 .id(visites.getId())
                 .dateEntree(visites.getDateEntree())
                 .dateSortie(visites.getDateSortie())
+                .visiteur(visites.getVisiteur() != null ? VisiteurDto.fromEntity(visites.getVisiteur()) : null)
+                .apprenant(visites.getApprenant() != null ? ApprenantDto.fromEntity(visites.getApprenant()) : null)
                 .build();
 
     }
@@ -44,6 +46,10 @@ public class VisiteDto {
         visites.setId(visiteDto.getId());
         visites.setDateEntree(visiteDto.getDateEntree());
         visites.setDateSortie(visiteDto.getDateSortie());
+        if(visiteDto.getApprenant() != null)
+            visites.setApprenant(ApprenantDto.toEntity(visiteDto.getApprenant()));
+        if (visiteDto.getVisiteur() !=null)
+            visites.setVisiteur(VisiteurDto.toEntity(visiteDto.getVisiteur()));
 
         return visites;
 

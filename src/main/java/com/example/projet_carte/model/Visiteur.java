@@ -27,4 +27,10 @@ public class Visiteur {
     @OneToMany(mappedBy = "visiteur")
     private Collection<Visites> visites;
 
+    public Visiteur(String prenom, String nom, String cni, String numTelephone) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.cni = cni;
+        this.numTelephone = numTelephone;
+    }
 }
