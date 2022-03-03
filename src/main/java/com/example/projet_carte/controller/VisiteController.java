@@ -15,8 +15,13 @@ public class VisiteController implements VisiteApi {
     VisiteService visiteService;
 
     @Override
-    public VisiteDto save(VisiteDto visiteDto) {
-        return visiteService.save(visiteDto);
+    public VisiteDto saveVisiteur(VisiteDto visiteDto) {
+        return visiteService.saveVisiteVisiteur(visiteDto);
+    }
+
+    @Override
+    public VisiteDto saveApprenant(VisiteDto visiteDto) {
+        return visiteService.saveVisiteApprenant(visiteDto);
     }
 
     @Override
@@ -31,11 +36,21 @@ public class VisiteController implements VisiteApi {
 
     @Override
     public List<VisiteDto> findVisitesApp() {
-        return null;
+        return visiteService.findVisitesApp();
     }
 
     @Override
     public List<VisiteDto> findVisitesVisiteur() {
         return visiteService.findVisitesVisiteur();
+    }
+
+    @Override
+    public VisiteDto SortieApprenant(VisiteDto visiteDto) {
+        return visiteService.SortieApprenant(visiteDto);
+    }
+
+    @Override
+    public VisiteDto SortieVisiteur(VisiteDto visiteDto) {
+        return visiteService.SortieVisiteur(visiteDto);
     }
 }

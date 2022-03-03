@@ -9,8 +9,11 @@ import java.util.List;
 @Api("Visite")
 public interface VisiteApi {
 
-    @PostMapping("/visites/create")
-    VisiteDto save(@RequestBody VisiteDto visiteDto);
+    @PostMapping("/visites/create/visiteur")
+    VisiteDto saveVisiteur(@RequestBody VisiteDto visiteDto);
+
+    @PostMapping("/visites/create/apprenant")
+    VisiteDto saveApprenant(@RequestBody VisiteDto visiteDto);
 
     @GetMapping("/visites")
     List<VisiteDto> findAll();
@@ -23,4 +26,10 @@ public interface VisiteApi {
 
     @GetMapping("visites/visiteur")
     List<VisiteDto> findVisitesVisiteur();
+
+    @PostMapping("visites/sortieApprenant")
+    VisiteDto SortieApprenant(@RequestBody VisiteDto visiteDto);
+
+    @PostMapping("visites/sortieVisiteur")
+    VisiteDto SortieVisiteur(@RequestBody VisiteDto visiteDto);
 }

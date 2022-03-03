@@ -1,11 +1,12 @@
 package com.example.projet_carte.dto;
 
 import com.example.projet_carte.model.Visites;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Builder
 @Data
@@ -14,11 +15,9 @@ public class VisiteDto {
 
     private Long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateEntree;
+    private LocalDateTime dateEntree;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateSortie;
+    private LocalDateTime dateSortie;
 
     private VisiteurDto visiteur;
 

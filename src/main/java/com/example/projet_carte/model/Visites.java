@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,9 +17,11 @@ public class Visites {
     @GeneratedValue
     private Long id;
 
-    private LocalDate dateEntree = LocalDate.now();
+    @Column(nullable = true)
+    private LocalDateTime dateEntree;
 
-    private LocalDate dateSortie;
+    @Column(nullable = true)
+    private LocalDateTime dateSortie;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private Visiteur visiteur;
