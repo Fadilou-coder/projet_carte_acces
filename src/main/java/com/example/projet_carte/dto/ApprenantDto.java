@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -19,15 +20,15 @@ import java.util.Date;
 public class ApprenantDto {
 
     private Long id;
-    protected String prenom;
-    protected String nom;
-    protected String email;
-    protected String phone;
-    protected String addresse;
-    protected String cni;
+    private String prenom;
+    private String nom;
+    private String email;
+    private String phone;
+    private String addresse;
+    private String cni;
     private String code;
     private String referentiel;
-    private Date dateNaissance;
+    private LocalDate dateNaissance;
     private String lieuNaissance;
     private String numTuteur;
     private byte[] avatar;

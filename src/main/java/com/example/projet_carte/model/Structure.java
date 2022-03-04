@@ -26,5 +26,7 @@ public class Structure {
     @OneToMany(mappedBy = "structure")
     private Collection<Admin> admins;
 
+    private boolean archive = false;
+
 
 }
