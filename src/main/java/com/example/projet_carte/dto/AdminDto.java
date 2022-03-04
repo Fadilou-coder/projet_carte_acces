@@ -35,6 +35,7 @@ public class AdminDto {
                 .cni(admin.getCni())
                 .username(admin.getUsername())
                 .password(admin.getPassword())
+                .structure(StructureDto.fromEntity(admin.getStructure()))
                 .build();
 
     }
@@ -53,6 +54,7 @@ public class AdminDto {
         admin.setCni(adminDto.getCni());
         admin.setUsername(adminDto.getUsername());
         admin.setPassword(adminDto.getPassword());
+        admin.setStructure(StructureDto.toEntity(adminDto.getStructure()));
 
         return admin;
     }
