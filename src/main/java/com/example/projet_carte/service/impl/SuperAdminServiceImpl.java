@@ -5,6 +5,7 @@ import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.SuperAdmin;
+import com.example.projet_carte.repository.AdminRepository;
 import com.example.projet_carte.repository.SuperAdminRepository;
 import com.example.projet_carte.service.SuperAdminService;
 import com.example.projet_carte.validator.SuperAdminValidator;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class SuperAdminServiceImpl implements SuperAdminService {
 
     private SuperAdminRepository superAdminRepository;
+    private AdminRepository adminRepository;
 
     @Override
     public List<SuperAdminDto> findAll() {
@@ -83,19 +85,19 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private void validation(SuperAdminDto superAdminDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(superAdminDto);
 
-        if (superAdminRepository.findByUsernameAndIdNot(superAdminDto.getUsername(), id).isPresent()){
+        if (superAdminRepository.findByUsernameAndIdNot(superAdminDto.getUsername(), id).isPresent() || adminRepository.findByUsername(superAdminDto.getUsername()).isPresent()){
             errors.add("un utilisateur avec ce username existe deja dans la base de données");
         }
 
-        if (superAdminRepository.findByCniAndIdNot(superAdminDto.getCni(), id).isPresent()){
+        if (superAdminRepository.findByCniAndIdNot(superAdminDto.getCni(), id).isPresent() || adminRepository.findByCni(superAdminDto.getCni()).isPresent()){
             errors.add("un utilisateur avec ce cni existe deja dans la base de données");
         }
 
-        if (superAdminRepository.findByEmailAndIdNot(superAdminDto.getEmail(), id).isPresent()){
+        if (superAdminRepository.findByEmailAndIdNot(superAdminDto.getEmail(), id).isPresent() || adminRepository.findByEmail(superAdminDto.getEmail()).isPresent()){
             errors.add("un utilisateur avec ce email existe deja dans la base de données");
         }
 
-        if (superAdminRepository.findByPhoneAndIdNot(superAdminDto.getPhone(), id).isPresent()){
+        if (superAdminRepository.findByPhoneAndIdNot(superAdminDto.getPhone(), id).isPresent() || adminRepository.findByPhone(superAdminDto.getPhone()).isPresent()){
             errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
         }
 
