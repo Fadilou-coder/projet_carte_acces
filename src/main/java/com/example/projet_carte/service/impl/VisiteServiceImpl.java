@@ -56,6 +56,7 @@ public class VisiteServiceImpl implements VisiteService {
 
     @Override
     public List<VisiteDto> findByDate(String date) {
+        if (date == null) return null;
         return visiteRepository.findByDateEntreeBetween(LocalDate.parse(date).atStartOfDay(), LocalDate.parse(date).plusDays(1).atStartOfDay()).stream().map(VisiteDto::fromEntity).collect(Collectors.toList());
     }
 

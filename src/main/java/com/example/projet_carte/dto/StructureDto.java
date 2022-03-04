@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Data
@@ -32,9 +33,11 @@ public class StructureDto {
         if(structureDto == null) return null;
 
             Structure structure = new Structure();
-
             structure.setId(structureDto.getId());
             structure.setNomStructure(structureDto.getNomStructure());
+            if (structureDto.getAdmins() != null){
+                structure.setAdmins(structureDto.getAdmins().stream().map(AdminDto::toEntity).collect(Collectors.toList()));
+            }
         return structure;
     }
 }

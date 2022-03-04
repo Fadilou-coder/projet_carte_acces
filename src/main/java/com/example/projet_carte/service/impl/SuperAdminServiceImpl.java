@@ -33,6 +33,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public SuperAdminDto findByCni(String cni) {
+        if (cni == null) return null;
         return superAdminRepository.findByCni(cni).map(SuperAdminDto::fromEntity).orElseThrow(() ->
                 new EntityNotFoundException(
                         "Aucun utilisateur avec le cni = " + cni + " ne se trouve dans la BDD",
@@ -50,6 +51,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public SuperAdminDto update(SuperAdminDto superAdminDto, Long id) {
+        if (id == null) return null;
         SuperAdmin superAdmin = superAdminRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(
                         "Aucun utilisateur avec le cni = " + id + " ne se trouve dans la BDD",
@@ -72,6 +74,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public SuperAdminDto delete(Long id) {
+        if (id == null) return null;
         SuperAdmin superAdmin = superAdminRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(
                         "Aucun utilisateur avec le cni = " + id + " ne se trouve dans la BDD",
@@ -85,24 +88,10 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private void validation(SuperAdminDto superAdminDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(superAdminDto);
 
-        if (superAdminRepository.findByUsernameAndIdNot(superAdminDto.getUsername(), id).isPresent() || adminRepository.findByUsername(superAdminDto.getUsername()).isPresent()){
-            errors.add("un utilisateur avec ce username existe deja dans la base de données");
-        }
-
-        if (superAdminRepository.findByCniAndIdNot(superAdminDto.getCni(), id).isPresent() || adminRepository.findByCni(superAdminDto.getCni()).isPresent()){
-            errors.add("un utilisateur avec ce cni existe deja dans la base de données");
-        }
-
-        if (superAdminRepository.findByEmailAndIdNot(superAdminDto.getEmail(), id).isPresent() || adminRepository.findByEmail(superAdminDto.getEmail()).isPresent()){
-            errors.add("un utilisateur avec ce email existe deja dans la base de données");
-        }
-
-        if (superAdminRepository.findByPhoneAndIdNot(superAdminDto.getPhone(), id).isPresent() || adminRepository.findByPhone(superAdminDto.getPhone()).isPresent()){
-            errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
-        }
+        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superAdminDto.getUsername(), adminRepository, superAdminDto.getCni(), superAdminDto.getEmail(), superAdminDto.getPhone());
 
         if (!errors.isEmpty()) {
-            throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.VISITEUR_NOT_VALID, errors);
+            throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.ADMIN_NOT_VALID, errors);
         }
 
     }
