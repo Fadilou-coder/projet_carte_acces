@@ -14,4 +14,6 @@ public interface VisiteRepository  extends JpaRepository<Visites, Long> {
     List<Visites> findAllByApprenantIsNotNull();
     List<Visites> findAllByVisiteurIsNotNull();
     Optional<Visites> findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDateTime dateEntree, LocalDateTime dateEntree2, Apprenant apprenant, Visiteur visiteur);
+    List<Visites> findByDateEntreeBetweenAndApprenantIsNotNull(LocalDateTime dateEntree, LocalDateTime dateEntree2);
+    List<Visites> findByDateEntreeBetweenAndVisiteurIsNotNull(LocalDateTime dateEntree, LocalDateTime dateEntree2);
 }

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +59,24 @@ public class VisiteServiceImpl implements VisiteService {
     public List<VisiteDto> findByDate(String date) {
         if (date == null) return null;
         return visiteRepository.findByDateEntreeBetween(LocalDate.parse(date).atStartOfDay(), LocalDate.parse(date).plusDays(1).atStartOfDay()).stream().map(VisiteDto::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VisiteDto> findByDateByVisiteur(String date, String vst) {
+        if (Objects.equals(vst, "apprenant")){
+            return visiteRepository.findByDateEntreeBetweenAndApprenantIsNotNull(LocalDate.parse(date).atStartOfDay(),
+                    LocalDate.parse(date).plusDays(1).atStartOfDay())
+                    .stream()
+                    .map(VisiteDto::fromEntity)
+                    .collect(Collectors.toList());
+        }else if (Objects.equals(vst, "visiteur")){
+            return visiteRepository.findByDateEntreeBetweenAndVisiteurIsNotNull(LocalDate.parse(date).atStartOfDay(),
+                            LocalDate.parse(date).plusDays(1).atStartOfDay())
+                            .stream()
+                            .map(VisiteDto::fromEntity)
+                            .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     @Override

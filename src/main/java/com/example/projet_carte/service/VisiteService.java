@@ -10,6 +10,7 @@ public interface VisiteService {
     VisiteDto saveVisiteApprenant(VisiteDto visiteDto);
     List<VisiteDto> findAll();
     List<VisiteDto> findByDate(String date);
+    List<VisiteDto> findByDateByVisiteur(String date, String vst);
     List<VisiteDto> findVisitesApp();
     List<VisiteDto> findVisitesVisiteur();
     VisiteDto SortieApprenant(VisiteDto visiteDto);

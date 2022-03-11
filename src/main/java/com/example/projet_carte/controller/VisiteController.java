@@ -35,6 +35,11 @@ public class VisiteController implements VisiteApi {
     }
 
     @Override
+    public List<VisiteDto> findByDateByVisiteur(String date, String vst) {
+        return visiteService.findByDateByVisiteur(date, vst);
+    }
+
+    @Override
     public List<VisiteDto> findVisitesApp() {
         return visiteService.findVisitesApp();
     }

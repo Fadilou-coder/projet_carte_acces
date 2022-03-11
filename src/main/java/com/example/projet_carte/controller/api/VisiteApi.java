@@ -21,6 +21,9 @@ public interface VisiteApi {
     @GetMapping("/visites/{date}")
     List<VisiteDto> findByDate(@PathVariable String date);
 
+    @GetMapping("/visites/{date}/{vst}")
+    List<VisiteDto> findByDateByVisiteur(@PathVariable("date") String date, @PathVariable("vst") String vst);
+
     @GetMapping("visites/apprenant")
     List<VisiteDto> findVisitesApp();
 
