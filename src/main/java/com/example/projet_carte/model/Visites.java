@@ -18,7 +18,7 @@ public class Visites {
     private Long id;
 
     @Column(nullable = true)
-    private LocalDateTime dateEntree;
+    private LocalDateTime dateEntree = LocalDateTime.now();
 
     @Column(nullable = true)
     private LocalDateTime dateSortie;
@@ -29,4 +29,8 @@ public class Visites {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Apprenant apprenant;
 
+    public Visites(Visiteur visiteur, Apprenant apprenant) {
+        this.visiteur = visiteur;
+        this.apprenant = apprenant;
+    }
 }

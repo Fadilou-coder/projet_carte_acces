@@ -41,7 +41,7 @@ public class VisiteServiceImpl implements VisiteService {
     public VisiteDto saveVisiteApprenant(VisiteDto visiteDto) {
         if (apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).isPresent()) {
             visiteDto.setApprenant(ApprenantDto.fromEntity(apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).get()));
-            visiteDto.setDateSortie(LocalDateTime.now());
+            visiteDto.setDateEntree(LocalDateTime.now());
             return VisiteDto.fromEntity(visiteRepository.save(VisiteDto.toEntity(visiteDto)));
         }
         throw new InvalidEntityException("Apprenant Invalid", ErrorCodes.APPRENANT_NOT_FOUND, new ArrayList<>());

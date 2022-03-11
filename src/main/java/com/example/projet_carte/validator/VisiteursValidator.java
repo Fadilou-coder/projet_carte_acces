@@ -33,7 +33,7 @@ public class VisiteursValidator {
         {
             errors.add("Veuillez renseigner le CNI du visiteur");
         }
-        if (!cni.matches("[0-9] [0-9]{3} [0-9]{4} [0-9]{5}")){
+        if (!cni.matches("(^[1-2])[0-9]{12}$")){
             errors.add("CNI non valide");
         }
         if (!StringUtils.hasLength(prenom))
