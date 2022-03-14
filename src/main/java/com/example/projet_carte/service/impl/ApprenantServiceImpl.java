@@ -194,7 +194,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     private boolean userAlreadyExistsCode(String code, Long id) {
         Optional<Apprenant> user;
         if (id == null) {
-            user = apprenantRepository.findByCode(code);
+            user = apprenantRepository.findByCodeAndArchiveFalse(code);
         }else {
             user = apprenantRepository.findByCodeAndIdNot(code, id);
         }

@@ -24,7 +24,7 @@ public class ApprenantFixture implements CommandLineRunner {
     public void run(String... args) throws Exception {
         for (int i = 0; i < 15; i++) {
             apprenantRepository.save(
-                    new Apprenant( "prenom"+i,  "nom"+i, "apprenant"+i+"@gmail.com","77000000"+i,"adresse"+i, "1 254 5678 9010"+i, "2020035"+i,"dev web", LocalDate.parse("1990-02-21"),
+                    new Apprenant( "prenom"+i,  "nom"+i, "apprenant"+i+"@gmail.com","77000000"+i,"adresse"+i, "125456789010"+i, "2020035"+i,"dev web", LocalDate.parse("1990-02-21"),
                     "Thies", "77149000"+i)
             );
         }

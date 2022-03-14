@@ -34,14 +34,22 @@ public class VisiteServiceImpl implements VisiteService {
 
     @Override
     public VisiteDto saveVisiteVisiteur(VisiteDto visiteDto) {
+        if (visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).isPresent()) {
+            if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
+                    LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).get()).isPresent())
+                return null;
+        }
         visiteDto.setDateEntree(LocalDateTime.now());
         return getVisiteVisiteur(visiteDto);
     }
 
     @Override
     public VisiteDto saveVisiteApprenant(VisiteDto visiteDto) {
-        if (apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).isPresent()) {
-            visiteDto.setApprenant(ApprenantDto.fromEntity(apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).get()));
+        if (apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).isPresent()) {
+            if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
+                    LocalDate.now().plusDays(1).atStartOfDay(), apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).get(), null).isPresent())
+                return null;
+            visiteDto.setApprenant(ApprenantDto.fromEntity(apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).get()));
             visiteDto.setDateEntree(LocalDateTime.now());
             return VisiteDto.fromEntity(visiteRepository.save(VisiteDto.toEntity(visiteDto)));
         }
@@ -92,16 +100,16 @@ public class VisiteServiceImpl implements VisiteService {
     @Override
     public VisiteDto SortieApprenant(VisiteDto visiteDto) {
         Visites visite;
-        if (apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).isPresent()) {
+        if (apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).isPresent()) {
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
-                    LocalDate.now().plusDays(1).atStartOfDay(), apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).get(), null).isPresent()) {
+                    LocalDate.now().plusDays(1).atStartOfDay(), apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).get(), null).isPresent()) {
                 visite = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
-                        LocalDate.now().plusDays(1).atStartOfDay(), apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).get(), null).get();
+                        LocalDate.now().plusDays(1).atStartOfDay(), apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).get(), null).get();
                 visite.setDateSortie(LocalDateTime.now());
                 visiteRepository.flush();
                 return VisiteDto.fromEntity(visite);
             } else{
-                visiteDto.setApprenant(ApprenantDto.fromEntity(apprenantRepository.findByCni(visiteDto.getApprenant().getCni()).get()));
+                visiteDto.setApprenant(ApprenantDto.fromEntity(apprenantRepository.findByCodeAndArchiveFalse(visiteDto.getApprenant().getCode()).get()));
                 visiteDto.setDateSortie(LocalDateTime.now());
                 return VisiteDto.fromEntity(visiteRepository.save(VisiteDto.toEntity(visiteDto)));
             }
