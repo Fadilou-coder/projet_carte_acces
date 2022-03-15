@@ -18,7 +18,7 @@ public interface ApprenantService {
             String phone,
             String adresse,
             String cni,
-            ReferentielDto referentielDto,
+            String referentielDto,
             String dateNaissance,
             String lieuNaissance,
             String numTuteur,
