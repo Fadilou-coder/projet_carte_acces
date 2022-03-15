@@ -8,10 +8,10 @@
 		<!--  lookup parent from repository  -->
 	</parent>
 	<groupId>com.odc</groupId>
-	<artifactId>prote_carte</artifactId>
+	<artifactId>suiviapprenants</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>projet_carte</name>
-	<description>Pointage</description>
+	<name>projet_carte_access</name>
+	<description>Systeme de pointage des apprenants</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.4.32.Final</version>
+			<version>5.6.5.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>2.3.7</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
-			<version>3.18.1</version>
+			<version>3.18.3</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

@@ -1,8 +1,8 @@
 package com.example.projet_carte.service.impl;
 
 import com.example.projet_carte.dto.AdminDto;
-import com.example.projet_carte.dto.ApprenantDto;
 import com.example.projet_carte.dto.StructureDto;
+import com.example.projet_carte.dto.SuperAdminDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
@@ -10,8 +10,10 @@ import com.example.projet_carte.model.Admin;
 import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.AdminRepository;
 import com.example.projet_carte.repository.StructureRepository;
+import com.example.projet_carte.repository.SuperAdminRepository;
 import com.example.projet_carte.service.AdminService;
 import com.example.projet_carte.validator.AdminValidator;
+import com.example.projet_carte.validator.SuperAdminValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +33,7 @@ public class AdminServiceImpl implements AdminService {
 
     AdminRepository adminRepository;
     StructureRepository structureRepository;
+    SuperAdminRepository superAdminRepository;
 
 
     @Override
@@ -42,12 +45,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminDto save(AdminDto adminDto) throws IOException  {
 
-        List<String> errors = validation(adminDto);
-        if (!errors.isEmpty()) {
-            log.error("Admin is not valid {}", adminDto);
-            throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
-        }
-        //Structure structure = structureRepository.findByNomStructure(adminDto.getStructure().toString());
+        validation(adminDto, 0L);
        Optional <Structure> structure = structureRepository.findById(adminDto.getStructure().getId());
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         adminDto.setPassword(encoder.encode("password"));
@@ -85,10 +83,11 @@ public class AdminServiceImpl implements AdminService {
         admin.setAdresse(adminDto.getAddresse());
         admin.setCni(adminDto.getCni());
         admin.setUsername(adminDto.getUsername());
-        admin.setStructure(structureRepository.findByIdAndArchiveFalse(adminDto.getStructure().getId()).get());
+        if (structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).isPresent())
+            admin.setStructure(structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).get());
 
         AdminDto adminDto1 = AdminDto.fromEntity(admin);
-        validation(adminDto1);
+        validation(adminDto1, id);
 
         adminRepository.flush();
         return adminDto1;
@@ -108,72 +107,33 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.flush();
     }
 
-    private List<String> validation(AdminDto adminDto) {
+    private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
-        if(userAlreadyExists(adminDto.getEmail(), adminDto.getId())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme email existe deja", ErrorCodes.ADMIN_ALREADY_IN_USE,
-                    Collections.singletonList("Un autre utilisateur avec le meme email existe deja dans la BDD"));
-        }
 
-        if(userAlreadyExistsPhone(adminDto.getPhone(), adminDto.getId())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme numero de telephone existe deja", ErrorCodes.ADMIN_ALREADY_IN_USE,
-                    Collections.singletonList("Un autre utilisateur avec le meme numero de telephone existe deja dans la BDD"));
-        }
-
-        if(userAlreadyExistsCni(adminDto.getCni(), adminDto.getId())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme cni existe deja", ErrorCodes.ADMIN_ALREADY_IN_USE,
-                    Collections.singletonList("Un autre utilisateur avec le meme cni existe deja dans la BDD"));
-        }
-
-        if(userAlreadyExistsUsername(adminDto.getUsername(), adminDto.getId())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme username existe deja", ErrorCodes.ADMIN_ALREADY_IN_USE,
-                    Collections.singletonList("Un autre utilisateur avec le meme username existe deja dans la BDD"));
-        }
+        ArealyExist(id, errors, superAdminRepository, adminDto.getUsername(), adminRepository, adminDto.getCni(), adminDto.getEmail(), adminDto.getPhone());
 
         if (!errors.isEmpty()) {
-            log.error("Admin is not valid {}", adminDto);
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
         }
-        return errors;
+
     }
 
-    private boolean userAlreadyExists(String email, Long id) {
-        Optional<Admin> user;
-        if (id == null){
-            user = adminRepository.findByEmail(email);
-        }else {
-            user = adminRepository.findByEmailAndIdNot(email, id);
+    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, String username, AdminRepository adminRepository, String cni, String email, String phone) {
+        if (superAdminRepository.findByUsernameAndIdNot(username, id).isPresent() || adminRepository.findByUsernameAndIdNot(username, id).isPresent()){
+            errors.add("un utilisateur avec ce username existe deja dans la base de données");
         }
-        return user.isPresent();
-    }
-    private boolean userAlreadyExistsPhone(String phone, Long id) {
-        Optional<Admin> user;
-        if (id == null) {
-            user = adminRepository.findByPhone(phone);
-        }else {
-            user = adminRepository.findByPhoneAndIdNot(phone, id);
-        }
-        return user.isPresent();
-    }
 
-    private boolean userAlreadyExistsCni(String cni, Long id) {
-        Optional<Admin> user;
-        if (id == null) {
-            user = adminRepository.findByCni(cni);
-        }else {
-            user = adminRepository.findByCniAndIdNot(cni, id);
+        if (superAdminRepository.findByCniAndIdNot(cni, id).isPresent() || adminRepository.findByCniAndIdNot(cni, id).isPresent()){
+            errors.add("un utilisateur avec ce cni existe deja dans la base de données");
         }
-        return user.isPresent();
-    }
 
-    private boolean userAlreadyExistsUsername(String username, Long id) {
-        Optional<Admin> user;
-        if (id == null) {
-            user = adminRepository.findByUsername(username);
-        }else {
-            user = adminRepository.findByUsernameAndIdNot(username, id);
+        if (superAdminRepository.findByEmailAndIdNot(email, id).isPresent() || adminRepository.findByEmailAndIdNot(email, id).isPresent()){
+            errors.add("un utilisateur avec ce email existe deja dans la base de données");
         }
-        return user.isPresent();
+
+        if (superAdminRepository.findByPhoneAndIdNot(phone, id).isPresent() || adminRepository.findByPhoneAndIdNot(phone, id).isPresent()){
+            errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
+        }
     }
 
 }

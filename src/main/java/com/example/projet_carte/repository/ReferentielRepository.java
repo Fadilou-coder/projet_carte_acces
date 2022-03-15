@@ -1,12 +1,10 @@
 package com.example.projet_carte.repository;
 
         import com.example.projet_carte.model.Referentiel;
-        import com.example.projet_carte.model.Structure;
         import org.springframework.data.jpa.repository.JpaRepository;
+        import java.util.List;
 
-        import java.util.Optional;
 
 public interface ReferentielRepository extends JpaRepository<Referentiel, Long> {
-
-    Optional<Referentiel> findByIdAndArchiveFalse(Long id);
+        List<Referentiel> findAll();
 }

@@ -1,4 +1,16 @@
 package com.example.projet_carte.controller.api;
 
+import com.example.projet_carte.dto.VisiteurDto;
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
+@Api("Visiteur")
 public interface VisiteurApi {
+
+    @GetMapping("/visiteurs")
+    List<VisiteurDto> findAll();
 }

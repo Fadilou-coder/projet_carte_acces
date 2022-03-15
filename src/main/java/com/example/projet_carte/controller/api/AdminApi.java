@@ -24,6 +24,4 @@ public interface AdminApi {
 
     @PutMapping("/admin/{id}")
     AdminDto put(@RequestBody AdminDto adminDto, @PathVariable Long id) throws IOException;
-
-
 }

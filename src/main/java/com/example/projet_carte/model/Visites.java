@@ -3,11 +3,9 @@ package com.example.projet_carte.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.time.LocalDate;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -19,14 +17,20 @@ public class Visites {
     @GeneratedValue
     private Long id;
 
-    private LocalDate dateEntree;
+    @Column(nullable = true)
+    private LocalDateTime dateEntree = LocalDateTime.now();
 
-    private LocalDate dateSortie;
+    @Column(nullable = true)
+    private LocalDateTime dateSortie;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Visiteur visiteur;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Apprenant apprenant;
 
+    public Visites(Visiteur visiteur, Apprenant apprenant) {
+        this.visiteur = visiteur;
+        this.apprenant = apprenant;
+    }
 }

@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.zip.Deflater;
 
@@ -42,8 +43,13 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, ReferentielDto referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, ReferentielDto referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
+        Random random = new Random();
+        String code = "2022" + (random.nextInt((9999 - 1000) + 1) + 1);
+        while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
+            code = "2022" + (random.nextInt((9999 - 1000) + 1) + 1);
+        }
         ApprenantDto apprenantDto = new ApprenantDto(
                 null, prenom, nom, email, phone, adresse, cni, code, referentiel,
                  LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
@@ -70,7 +76,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String code,
+    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni,
                             String referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         if (id == null) {
             log.error("Apprenant Id is null");
@@ -86,7 +92,6 @@ public class ApprenantServiceImpl implements ApprenantService {
         apprenant.setPhone(phone);
         apprenant.setAdresse(adresse);
         apprenant.setCni(cni);
-        apprenant.setCode(code);
         //apprenant.setReferentiel(referentiel);
         apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
         apprenant.setLieuNaissance(lieuNaissance);
@@ -197,7 +202,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     private boolean userAlreadyExistsCode(String code, Long id) {
         Optional<Apprenant> user;
         if (id == null) {
-            user = apprenantRepository.findByCode(code);
+            user = apprenantRepository.findByCodeAndArchiveFalse(code);
         }else {
             user = apprenantRepository.findByCodeAndIdNot(code, id);
         }

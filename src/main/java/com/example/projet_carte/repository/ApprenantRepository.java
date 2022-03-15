@@ -12,9 +12,8 @@ public interface ApprenantRepository extends JpaRepository<Apprenant, Long> {
 
     Optional<Apprenant> findByIdAndArchiveFalse(Long id);
 
-    Optional<Apprenant> findByCode(String code);
+    Optional<Apprenant> findByCodeAndArchiveFalse(String code);
 
     Optional<Apprenant> findByCodeAndIdNot(String code, Long id);
-
-
+    Optional<Apprenant> findByCni(String cni);
 }

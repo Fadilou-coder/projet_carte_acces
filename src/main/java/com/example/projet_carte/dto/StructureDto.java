@@ -1,11 +1,14 @@
 package com.example.projet_carte.dto;
+
+import lombok.AllArgsConstructor;
 import com.example.projet_carte.model.Structure;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Data
 @Builder
 public class StructureDto {
@@ -30,9 +33,11 @@ public class StructureDto {
         if(structureDto == null) return null;
 
             Structure structure = new Structure();
-
             structure.setId(structureDto.getId());
             structure.setNomStructure(structureDto.getNomStructure());
+            if (structureDto.getAdmins() != null){
+                structure.setAdmins(structureDto.getAdmins().stream().map(AdminDto::toEntity).collect(Collectors.toList()));
+            }
         return structure;
     }
 }

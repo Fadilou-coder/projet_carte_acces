@@ -1,8 +1,6 @@
 package com.example.projet_carte.repository;
 
 import com.example.projet_carte.model.Admin;
-import com.example.projet_carte.model.Apprenant;
-import com.example.projet_carte.model.Personne;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -28,16 +28,16 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, ReferentielDto referentiel,
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, ReferentielDto referentiel,
                              String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return  apprenantService.save(prenom, nom, email, phone, adresse, cni, code, referentiel,
+        return  apprenantService.save(prenom, nom, email, phone, adresse, cni, referentiel,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 
     @Override
-    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String code, String referentiel,
+    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel,
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni, code, referentiel,
+        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni, referentiel,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 
