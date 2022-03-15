@@ -2,6 +2,7 @@ package com.example.projet_carte.dataFixtures;
 
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.repository.ApprenantRepository;
+import com.example.projet_carte.repository.ReferentielRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 public class ApprenantFixture implements CommandLineRunner {
 
     ApprenantRepository apprenantRepository;
+    ReferentielRepository referentielRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -28,7 +30,7 @@ public class ApprenantFixture implements CommandLineRunner {
 
         for (int i = 0; i < 15; i++) {
             apprenantRepository.save(
-                    new Apprenant( "prenom"+i,  "nom"+i, "apprenant"+i+"@gmail.com","77000000"+i,"adresse"+i, "1 254 5678 9010"+i, "2020035"+i,"dev web", LocalDate.parse("1990-02-21"),
+                    new Apprenant( "prenom"+i,  "nom"+i, "apprenant"+i+"@gmail.com","77000000"+i,"adresse"+i, "1 254 5678 9010"+i, "2020035"+i, referentielRepository.findAll().get(0), LocalDate.parse("1990-02-21"),
                     "Thies", "77149000"+i)
             );
         }

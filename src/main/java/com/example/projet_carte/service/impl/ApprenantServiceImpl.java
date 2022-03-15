@@ -1,12 +1,14 @@
 package com.example.projet_carte.service.impl;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
 import com.example.projet_carte.repository.ApprenantRepository;
+import com.example.projet_carte.repository.ReferentielRepository;
 import com.example.projet_carte.repository.UserRepository;
 import com.example.projet_carte.service.ApprenantService;
 import com.example.projet_carte.validator.PersonneValidator;
@@ -30,6 +32,7 @@ import java.util.zip.Deflater;
 public class ApprenantServiceImpl implements ApprenantService {
     ApprenantRepository apprenantRepository;
     UserRepository userRepository;
+    ReferentielRepository referentielRepository;
 
     @Override
     public List<ApprenantDto> findAll() {
@@ -39,11 +42,11 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, String referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, ReferentielDto referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         ApprenantDto apprenantDto = new ApprenantDto(
-                null, prenom, nom, email, phone, adresse, cni, code,
-                referentiel,  LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
+                null, prenom, nom, email, phone, adresse, cni, code, referentiel,
+                 LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
         );
         validation(apprenantDto);
         return ApprenantDto.fromEntity(
@@ -84,7 +87,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         apprenant.setAdresse(adresse);
         apprenant.setCni(cni);
         apprenant.setCode(code);
-        apprenant.setReferentiel(referentiel);
+        //apprenant.setReferentiel(referentiel);
         apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
         apprenant.setLieuNaissance(lieuNaissance);
         apprenant.setNumTuteur(numTuteur);

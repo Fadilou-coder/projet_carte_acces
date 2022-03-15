@@ -1,6 +1,7 @@
 package com.example.projet_carte.controller.api;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public interface ApprenantApi {
             @RequestParam("adresse") String adresse,
             @RequestParam("cni") String cni,
             @RequestParam("code") String code,
-            @RequestParam("referentiel") String referentiel,
+            @RequestParam("referentiel") ReferentielDto referentiel,
             @RequestParam("dateNaissance") String dateNaissance,
             @RequestParam("lieuNaissance") String lieuNaissance,
             @RequestParam("numTuteur") String numTuteur,

@@ -2,6 +2,7 @@ package com.example.projet_carte.controller;
 
 import com.example.projet_carte.controller.api.ApprenantApi;
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.service.ApprenantService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, String referentiel,
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String code, ReferentielDto referentiel,
                              String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         return  apprenantService.save(prenom, nom, email, phone, adresse, cni, code, referentiel,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
