@@ -1,18 +1,12 @@
 package com.example.projet_carte.dto;
 
 import com.example.projet_carte.model.Apprenant;
-import com.example.projet_carte.model.Visites;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Builder
 @Data
@@ -27,7 +21,7 @@ public class ApprenantDto {
     private String addresse;
     private String cni;
     private String code;
-    private String referentiel;
+    private ReferentielDto referentiel;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String numTuteur;
@@ -47,7 +41,7 @@ public class ApprenantDto {
                 .addresse(apprenant.getAdresse())
                 .cni(apprenant.getCni())
                 .code(apprenant.getCode())
-                .referentiel(apprenant.getReferentiel())
+                .referentiel(ReferentielDto.fromEntity(apprenant.getReferentiel()))
                 .dateNaissance(apprenant.getDateNaissance())
                 .lieuNaissance(apprenant.getLieuNaissance())
                 .numTuteur(apprenant.getNumTuteur())
@@ -69,7 +63,7 @@ public class ApprenantDto {
         apprenant.setAdresse(apprenantDto.getAddresse());
         apprenant.setCni(apprenantDto.getCni());
         apprenant.setCode(apprenantDto.getCode());
-        apprenant.setReferentiel(apprenantDto.getReferentiel());
+        apprenant.setReferentiel(ReferentielDto.toEntity(apprenantDto.getReferentiel()));
         apprenant.setDateNaissance(apprenantDto.getDateNaissance());
         apprenant.setLieuNaissance(apprenantDto.getLieuNaissance());
         apprenant.setNumTuteur(apprenantDto.getNumTuteur());

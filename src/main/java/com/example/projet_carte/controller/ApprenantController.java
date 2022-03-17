@@ -2,6 +2,7 @@ package com.example.projet_carte.controller;
 
 import com.example.projet_carte.controller.api.ApprenantApi;
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.service.ApprenantService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;

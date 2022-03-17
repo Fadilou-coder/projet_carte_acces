@@ -1,6 +1,7 @@
 package com.example.projet_carte.service;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public interface ApprenantService {
             String phone,
             String adresse,
             String cni,
-            String referentiel,
+            String referentielDto,
             String dateNaissance,
             String lieuNaissance,
             String numTuteur,

@@ -12,11 +12,11 @@ public class PersonneValidator {
     public static List<String> Appvalidate(ApprenantDto userDto) {
         return getStrings(userDto == null, userDto.getPrenom(),
                 userDto.getNom(), userDto.getEmail(), userDto.getPhone(), userDto.getAddresse(), userDto.getCni(),
-                userDto.getCode(), userDto.getReferentiel(), userDto.getDateNaissance(), userDto.getLieuNaissance(), userDto.getNumTuteur());
+                userDto.getCode(),  userDto.getDateNaissance(), userDto.getLieuNaissance(), userDto.getNumTuteur());
     }
 
     private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone, String addresse, String cni,
-                                           String code, String referentiel, LocalDate dateNaissance, String lieuNaissance, String numTuteur) {
+                                           String code, LocalDate dateNaissance, String lieuNaissance, String numTuteur) {
         List<String> errors = new ArrayList<>();
 
         if (b) {
@@ -25,7 +25,6 @@ public class PersonneValidator {
             errors.add("Veuillez renseigner l'email'");
             errors.add("Veuillez renseigner le cni'");
             errors.add("Veuillez renseigner le code'");
-            errors.add("Veuillez renseigner le referentiel'");
             errors.add("Veuillez renseigner le lieu de naissance'");
             errors.add("Veuillez renseigner l'adresse'");
             errors.add("Veuillez renseigner le numero de telephone'");
@@ -48,9 +47,6 @@ public class PersonneValidator {
         }
         if (!StringUtils.hasLength(code)) {
             errors.add("Veuillez renseigner le code'");
-        }
-        if (!StringUtils.hasLength(referentiel)) {
-            errors.add("Veuillez renseigner le referentiel'");
         }
         if (!StringUtils.hasLength(lieuNaissance)) {
             errors.add("Veuillez renseigner le lieu de naissance'");

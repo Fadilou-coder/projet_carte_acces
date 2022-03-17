@@ -1,12 +1,17 @@
 package com.example.projet_carte.service.impl;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.ReferentielDto;
+import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
+import com.example.projet_carte.model.Referentiel;
+import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.ApprenantRepository;
+import com.example.projet_carte.repository.ReferentielRepository;
 import com.example.projet_carte.repository.UserRepository;
 import com.example.projet_carte.service.ApprenantService;
 import com.example.projet_carte.validator.PersonneValidator;
@@ -31,6 +36,7 @@ import java.util.zip.Deflater;
 public class ApprenantServiceImpl implements ApprenantService {
     ApprenantRepository apprenantRepository;
     UserRepository userRepository;
+    ReferentielRepository referentielRepository;
 
     @Override
     public List<ApprenantDto> findAll() {
@@ -47,16 +53,20 @@ public class ApprenantServiceImpl implements ApprenantService {
         while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
             code = "2022" + (random.nextInt((9999 - 1000) + 1) + 1);
         }
-        ApprenantDto apprenantDto = new ApprenantDto(
-                null, prenom, nom, email, phone, adresse, cni, code,
-                referentiel,  LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
-        );
-        validation(apprenantDto);
-        return ApprenantDto.fromEntity(
-                apprenantRepository.save(
-                        ApprenantDto.toEntity(apprenantDto)
-                )
-        );
+        if (referentielRepository.findByLibelle(referentiel).isPresent()) {
+            ApprenantDto apprenantDto = new ApprenantDto(
+                    null, prenom, nom, email, phone, adresse, cni, code, ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()),
+                    LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
+            );
+
+            validation(apprenantDto);
+            return ApprenantDto.fromEntity(
+                    apprenantRepository.save(
+                            ApprenantDto.toEntity(apprenantDto)
+                    )
+            );
+        }
+        throw new InvalidEntityException("le referentiel n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
     }
 
     @Override
@@ -89,7 +99,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         apprenant.setPhone(phone);
         apprenant.setAdresse(adresse);
         apprenant.setCni(cni);
-        apprenant.setReferentiel(referentiel);
+        //apprenant.setReferentiel(referentiel);
         apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
         apprenant.setLieuNaissance(lieuNaissance);
         apprenant.setNumTuteur(numTuteur);

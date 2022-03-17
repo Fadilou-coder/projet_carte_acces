@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -17,7 +18,6 @@ public class Apprenant extends Personne {
 
 
     private String code;
-    private String referentiel;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String numTuteur;
@@ -28,8 +28,11 @@ public class Apprenant extends Personne {
     @OneToMany(mappedBy = "apprenant")
     private Collection<Visites> visites;
 
+    @ManyToOne
+    private Referentiel referentiel;
+
     public Apprenant( String prenom, String nom, String email, String phone,
-                      String adresse, String cni, String code, String referentiel,
+                      String adresse, String cni, String code, Referentiel referentiel,
                       LocalDate dateNaissance, String lieuNaissance,String numTuteur
     ){
         super(prenom, nom, email, phone, adresse, cni );
