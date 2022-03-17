@@ -13,8 +13,6 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class Admin extends Personne {
 
-    @Column(unique=true)
-    private String username;
     private String password;
     private String role = "ADMIN";
 
@@ -23,9 +21,8 @@ public class Admin extends Personne {
     private Structure structure;
 
     public Admin(String prenom, String nom, String email, String phone,
-                 String adresse, String cni, String username, String password, Structure structure){
+                 String adresse, String cni, String password, Structure structure){
         super(prenom, nom, email, phone, adresse, cni );
-        this.username = username;
         this.password = password;
         this.structure = structure;
 

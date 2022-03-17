@@ -35,21 +35,21 @@ public class AuthenticationController implements AuthenticationApi {
   public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
-            request.getUsername(),
+            request.getEmail(),
             request.getPassword()
         )
     );
-    final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
     final String jwt = jwtUtil.generateToken((User) userDetails);
     List<String> roles = userDetails.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.toList());
     Long id;
-    if (adminRepository.findByUsernameAndArchiveFalse(userDetails.getUsername()).isPresent())
-      id = adminRepository.findByUsernameAndArchiveFalse(userDetails.getUsername()).get().getId();
+    if (adminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).isPresent())
+      id = adminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
     else
-      id = superAdminRepository.findByUsernameAndArchiveFalse(userDetails.getUsername()).get().getId();
+      id = superAdminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
 
     return ResponseEntity.ok(
             new AuthenticationResponse(jwt,roles, id)

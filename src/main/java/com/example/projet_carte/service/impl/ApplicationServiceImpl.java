@@ -22,17 +22,17 @@ public class ApplicationServiceImpl implements ApplicationService {
     SuperAdminRepository superAdminRepository;
     PasswordEncoder passwordEncoder;
     @Override
-    public Admin findUserByUsernameAdmin(String username) {
-        if (adminRepository.findByUsernameAndArchiveFalse(username).isPresent()) {
-            return adminRepository.findByUsernameAndArchiveFalse(username).get();
+    public Admin findUserByEmailAdmin(String username) {
+        if (adminRepository.findByEmailAndArchiveFalse(username).isPresent()) {
+            return adminRepository.findByEmailAndArchiveFalse(username).get();
         }
         return null;
     }
 
     @Override
-    public SuperAdmin findUserByUsernameSuperAdmin(String username) {
-        if (superAdminRepository.findByUsernameAndArchiveFalse(username).isPresent()) {
-            return superAdminRepository.findByUsernameAndArchiveFalse(username).get();
+    public SuperAdmin findUserByEmailSuperAdmin(String username) {
+        if (superAdminRepository.findByEmailAndArchiveFalse(username).isPresent()) {
+            return superAdminRepository.findByEmailAndArchiveFalse(username).get();
         }
         return null;
     }

@@ -82,7 +82,6 @@ public class AdminServiceImpl implements AdminService {
         admin.setPhone(adminDto.getPhone());
         admin.setAdresse(adminDto.getAddresse());
         admin.setCni(adminDto.getCni());
-        admin.setUsername(adminDto.getUsername());
         if (structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).isPresent())
             admin.setStructure(structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).get());
 
@@ -110,7 +109,7 @@ public class AdminServiceImpl implements AdminService {
     private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
-        ArealyExist(id, errors, superAdminRepository, adminDto.getUsername(), adminRepository, adminDto.getCni(), adminDto.getEmail(), adminDto.getPhone());
+        ArealyExist(id, errors, superAdminRepository, adminDto.getEmail(), adminRepository, adminDto.getCni(), adminDto.getEmail(), adminDto.getPhone());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
@@ -119,9 +118,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, String username, AdminRepository adminRepository, String cni, String email, String phone) {
-        if (superAdminRepository.findByUsernameAndIdNot(username, id).isPresent() || adminRepository.findByUsernameAndIdNot(username, id).isPresent()){
-            errors.add("un utilisateur avec ce username existe deja dans la base de données");
-        }
 
         if (superAdminRepository.findByCniAndIdNot(cni, id).isPresent() || adminRepository.findByCniAndIdNot(cni, id).isPresent()){
             errors.add("un utilisateur avec ce cni existe deja dans la base de données");

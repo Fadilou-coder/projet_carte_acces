@@ -12,12 +12,12 @@ public class AdminValidator {
 
     public static List<String> validateAd(AdminDto adminDto) {
         return getStrings(adminDto == null, adminDto.getPrenom(), adminDto.getNom(),adminDto.getEmail(),adminDto.getPhone(),
-                adminDto.getAddresse(), adminDto.getCni(), adminDto.getUsername(), adminDto.getStructure() == null);
+                adminDto.getAddresse(), adminDto.getCni(), adminDto.getStructure() == null);
     }
 
 
     private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone,
-                                           String adresse, String cni, String username, boolean b2) {
+                                           String adresse, String cni, boolean b2) {
         List<String> errors = new ArrayList<>();
 
         if (b) {
@@ -37,9 +37,6 @@ public class AdminValidator {
         }
         if (!phone.matches("^(33|7[05-8])[0-9]{7}$")){
             errors.add("Numero Telephone non valide");
-        }
-        if (!StringUtils.hasLength(username)) {
-            errors.add("Veuillez renseigner le nom d'utilisateur'");
         }
         if (!StringUtils.hasLength(prenom)) {
             errors.add("Veuillez renseigner le prenom'");

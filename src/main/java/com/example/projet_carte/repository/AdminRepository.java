@@ -11,8 +11,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     List<Admin> findAllByArchiveFalse();
     Optional<Admin> findByIdAndArchiveFalse(Long id);
 
-    Optional<Admin> findByUsernameAndArchiveFalse(String username);
-    Optional<Admin> findByUsernameAndIdNot(String username, Long id);
+    Optional<Admin> findByEmailAndArchiveFalse(String email);
 
     Optional<Admin> findByEmailAndIdNot(String email, Long id);
     Optional<Admin> findByPhoneAndIdNot(String num, Long id);
@@ -21,5 +20,4 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     Optional<Admin> findByEmail(String email);
     Optional<Admin> findByPhone(String num);
     Optional<Admin> findByCni(String cni);
-    Optional<Admin> findByUsername(String username);
 }

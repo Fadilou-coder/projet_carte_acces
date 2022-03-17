@@ -11,15 +11,12 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class SuperAdmin extends Personne {
 
-    @Column(unique=true)
-    private String username;
     private String password;
     private String role = "SUPER_ADMIN";
 
     public SuperAdmin(String prenom, String nom, String email, String phone,
-                      String adresse, String cni, String username, String password){
+                      String adresse, String cni, String password){
         super(prenom, nom, email, phone, adresse, cni );
-        this.username = username;
         this.password = password;
 
     }
