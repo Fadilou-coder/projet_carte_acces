@@ -21,6 +21,9 @@ public interface SuperAdminApi{
     @PutMapping("/superAdmin/{id}")
     SuperAdminDto update(@RequestBody SuperAdminDto superAdminDto, @PathVariable Long id);
 
+    @GetMapping("/superAdmin/{id}")
+    SuperAdminDto findById(@PathVariable Long id);
+
     @DeleteMapping("/superAdmin/{id}")
     SuperAdminDto delete(@PathVariable Long id);
 }

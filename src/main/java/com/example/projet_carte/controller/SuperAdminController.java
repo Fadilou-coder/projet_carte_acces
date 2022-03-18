@@ -35,6 +35,11 @@ public class SuperAdminController implements SuperAdminApi {
     }
 
     @Override
+    public SuperAdminDto findById(Long id) {
+        return superAdminService.findById(id);
+    }
+
+    @Override
     public SuperAdminDto delete(Long id) {
         return superAdminService.delete(id);
     }

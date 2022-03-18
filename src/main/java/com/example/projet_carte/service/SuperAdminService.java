@@ -10,4 +10,5 @@ public interface SuperAdminService {
     SuperAdminDto save(SuperAdminDto superAdminDto);
     SuperAdminDto update(SuperAdminDto superAdminDto, Long id);
     SuperAdminDto delete(Long id);
+    SuperAdminDto findById(Long id);
 }

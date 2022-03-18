@@ -85,6 +85,17 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         return SuperAdminDto.fromEntity(superAdmin);
     }
 
+    @Override
+    public SuperAdminDto findById(Long id) {
+        if (id == null) return null;
+        SuperAdmin superAdmin = superAdminRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun utilisateur avec le cni = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND)
+        );
+        return SuperAdminDto.fromEntity(superAdmin);
+    }
+
     private void validation(SuperAdminDto superAdminDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(superAdminDto);
 
