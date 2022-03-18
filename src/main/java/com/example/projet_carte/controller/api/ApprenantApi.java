@@ -19,7 +19,7 @@ public interface ApprenantApi {
     @GetMapping("/apprenants/{id}")
     ApprenantDto findById(@PathVariable Long id);
 
-    @GetMapping("/referentiels/{id}/apprenants/")
+    @GetMapping("/referentiel/{id}/apprenants")
     List<ApprenantDto> findByref(@PathVariable Long id);
 
     @PostMapping("/apprenants/create")
