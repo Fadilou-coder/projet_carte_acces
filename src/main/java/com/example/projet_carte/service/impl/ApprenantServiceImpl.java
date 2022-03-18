@@ -83,8 +83,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni,
-                            String referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         if (id == null) {
             log.error("Apprenant Id is null");
         }
@@ -99,7 +98,6 @@ public class ApprenantServiceImpl implements ApprenantService {
         apprenant.setPhone(phone);
         apprenant.setAdresse(adresse);
         apprenant.setCni(cni);
-        //apprenant.setReferentiel(referentiel);
         apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
         apprenant.setLieuNaissance(lieuNaissance);
         apprenant.setNumTuteur(numTuteur);

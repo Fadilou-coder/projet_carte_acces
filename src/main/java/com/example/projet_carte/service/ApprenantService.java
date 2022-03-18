@@ -35,7 +35,6 @@ public interface ApprenantService {
                      String phone,
                      String adresse,
                      String cni,
-                     String referentiel,
                      String dateNaissance,
                      String lieuNaissance,
                      String numTuteur,

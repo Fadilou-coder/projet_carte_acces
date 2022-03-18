@@ -35,9 +35,9 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel,
+    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni,
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni, referentiel,
+        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 

@@ -42,7 +42,6 @@ public interface ApprenantApi {
                      @RequestParam("phone") String phone,
                      @RequestParam("adresse") String adresse,
                      @RequestParam("cni") String cni,
-                     @RequestParam("referentiel") String referentiel,
                      @RequestParam("dateNaissance") String dateNaissance,
                      @RequestParam("lieuNaissance") String lieuNaissance,
                      @RequestParam("numTuteur") String numTuteur,
