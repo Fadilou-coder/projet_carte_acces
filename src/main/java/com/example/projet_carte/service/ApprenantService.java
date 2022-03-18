@@ -11,6 +11,8 @@ public interface ApprenantService {
 
     List<ApprenantDto> findAll();
 
+    List<ApprenantDto> findByref(Long id);
+
     ApprenantDto save(
             String prenom,
             String nom,

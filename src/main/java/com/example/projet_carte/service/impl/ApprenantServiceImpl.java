@@ -46,6 +46,13 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
+    public List<ApprenantDto> findByref(Long id) {
+        return apprenantRepository.findByReferentielIdAndArchiveFalse(id).stream()
+                .map(ApprenantDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         Random random = new Random();
