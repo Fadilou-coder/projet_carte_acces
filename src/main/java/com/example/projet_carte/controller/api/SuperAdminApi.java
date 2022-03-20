@@ -12,7 +12,7 @@ public interface SuperAdminApi{
     @GetMapping("/superAdmins")
     List<SuperAdminDto> findAll();
 
-    @GetMapping("/superAdmin/{cni}")
+    @GetMapping("/superAdmin/cni/{cni}")
     SuperAdminDto findByCni(@PathVariable String cni);
 
     @PostMapping("/superAdmin/create")
