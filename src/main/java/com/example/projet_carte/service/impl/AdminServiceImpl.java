@@ -1,19 +1,16 @@
 package com.example.projet_carte.service.impl;
 
+import com.example.projet_carte.EmailSenderService;
 import com.example.projet_carte.dto.AdminDto;
-import com.example.projet_carte.dto.StructureDto;
-import com.example.projet_carte.dto.SuperAdminDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Admin;
-import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.AdminRepository;
 import com.example.projet_carte.repository.StructureRepository;
 import com.example.projet_carte.repository.SuperAdminRepository;
 import com.example.projet_carte.service.AdminService;
 import com.example.projet_carte.validator.AdminValidator;
-import com.example.projet_carte.validator.SuperAdminValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,9 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,11 +29,12 @@ public class AdminServiceImpl implements AdminService {
     AdminRepository adminRepository;
     StructureRepository structureRepository;
     SuperAdminRepository superAdminRepository;
+    private EmailSenderService emailSenderService;
 
 
     @Override
     public List<AdminDto> findAll() {
-        return adminRepository.findAllByArchiveFalse().stream()
+        return adminRepository.findAll().stream()
                 .map(AdminDto::fromEntity).collect(Collectors.toList());
     }
 
@@ -46,15 +42,18 @@ public class AdminServiceImpl implements AdminService {
     public AdminDto save(AdminDto adminDto) throws IOException  {
 
         validation(adminDto, 0L);
-       Optional <Structure> structure = structureRepository.findById(adminDto.getStructure().getId());
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         adminDto.setPassword(encoder.encode("password"));
-        structure.ifPresent(value -> adminDto.setStructure(StructureDto.fromEntity(value)));
-        return AdminDto.fromEntity(
-                adminRepository.save(
-                        AdminDto.toEntity(adminDto)
-                )
-        );
+        String body = "Bonjour M.(MMe)" + adminDto.getPrenom() + " " + adminDto.getNom() + "vous trouverez ci dessous vos parametres de connexion. " + System.getProperty("line.separator") + System.getProperty("line.separator") +
+                "Email: " + adminDto.getEmail() + System.getProperty("line.separator") + " Mot de passe: password" + System.getProperty("line.separator") + System.getProperty("line.separator") +  " Cordialement!";
+        emailSenderService.sendSimpleEmail(adminDto.getEmail(), body,"Orange Digital Center");
+
+        //return AdminDto.fromEntity(
+          //      adminRepository.save(
+            //            AdminDto.toEntity(adminDto)
+              //  )
+        //);
+        return adminDto;
     }
 
     @Override
@@ -110,6 +109,10 @@ public class AdminServiceImpl implements AdminService {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
         ArealyExist(id, errors, superAdminRepository, adminDto.getEmail(), adminRepository, adminDto.getCni(), adminDto.getEmail(), adminDto.getPhone());
+
+        if (!structureRepository.findByIdAndArchiveFalse(adminDto.getStructure().getId()).isPresent()){
+            errors.add("la structure selectionnée n'existe pas dans la base de données");
+        }
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);

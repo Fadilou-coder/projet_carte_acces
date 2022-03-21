@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -17,7 +18,7 @@ public class Admin extends Personne {
     private String role = "ADMIN";
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Structure structure;
 
     public Admin(String prenom, String nom, String email, String phone,

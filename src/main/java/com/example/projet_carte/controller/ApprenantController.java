@@ -40,6 +40,11 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException {
+        apprenantService.sendCarte(prenom, nom, email, file);
+    }
+
+    @Override
     public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni,
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         return apprenantService.put(id, prenom, nom, email, phone, adresse, cni,

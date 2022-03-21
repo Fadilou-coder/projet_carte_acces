@@ -1,5 +1,6 @@
 package com.example.projet_carte.service.impl;
 
+import com.example.projet_carte.EmailSenderService;
 import com.example.projet_carte.dto.ApprenantDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.dto.StructureDto;
@@ -20,13 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.Deflater;
 
@@ -37,6 +34,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     ApprenantRepository apprenantRepository;
     UserRepository userRepository;
     ReferentielRepository referentielRepository;
+    EmailSenderService emailSenderService;
 
     @Override
     public List<ApprenantDto> findAll() {
@@ -74,6 +72,16 @@ public class ApprenantServiceImpl implements ApprenantService {
             );
         }
         throw new InvalidEntityException("le referentiel n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
+    }
+
+    @Override
+    public void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException {
+        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        FileOutputStream fos = new FileOutputStream( convFile );
+        fos.write( file.getBytes() );
+        fos.close();
+        String body = "Bonjour M.(MMe) " + prenom + " " + nom + " vous trouverez ci dessous votre carte d'access. "+ System.getProperty("line.separator") + System.getProperty("line.separator") + "Cordialement";
+        emailSenderService.sendEmailInlineImage("Orange Digital Center", body, email, convFile);
     }
 
     @Override

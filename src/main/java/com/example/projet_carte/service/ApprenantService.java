@@ -4,6 +4,7 @@ import com.example.projet_carte.dto.ApprenantDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public interface ApprenantService {
             MultipartFile avatar
 
     ) throws IOException;
+
+    void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException;
 
       ApprenantDto findById(Long id);
 

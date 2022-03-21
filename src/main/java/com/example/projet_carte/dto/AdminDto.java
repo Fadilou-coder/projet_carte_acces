@@ -19,6 +19,7 @@ public class AdminDto {
     protected String cni;
     protected String password;
     private StructureDto structure;
+    private boolean isbloqued;
 
     public static AdminDto fromEntity(Admin admin) {
 
@@ -34,6 +35,7 @@ public class AdminDto {
                 .cni(admin.getCni())
                 .password(admin.getPassword())
                 .structure(StructureDto.fromEntity(admin.getStructure()))
+                .isbloqued(admin.isArchive())
                 .build();
 
     }
@@ -52,6 +54,7 @@ public class AdminDto {
         admin.setCni(adminDto.getCni());
         admin.setPassword(adminDto.getPassword());
         admin.setStructure(StructureDto.toEntity(adminDto.getStructure()));
+        admin.setArchive(adminDto.isIsbloqued());
 
         return admin;
     }

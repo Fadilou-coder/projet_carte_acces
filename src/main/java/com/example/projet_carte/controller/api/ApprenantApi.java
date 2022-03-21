@@ -37,6 +37,14 @@ public interface ApprenantApi {
             @RequestParam("avatar") MultipartFile avatar
     ) throws IOException;
 
+    @PostMapping("/apprenants/sendMail")
+    void sendCarte(
+            @RequestParam("prenom") String prenom ,
+            @RequestParam("nom") String nom,
+            @RequestParam("email") String email ,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException;
+
     @PutMapping("/apprenants/{id}")
     ApprenantDto put(@PathVariable Long id,
                      @RequestParam("prenom") String prenom ,
