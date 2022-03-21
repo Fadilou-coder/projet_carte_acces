@@ -48,12 +48,11 @@ public class AdminServiceImpl implements AdminService {
                 "Email: " + adminDto.getEmail() + System.getProperty("line.separator") + " Mot de passe: password" + System.getProperty("line.separator") + System.getProperty("line.separator") +  " Cordialement!";
         emailSenderService.sendSimpleEmail(adminDto.getEmail(), body,"Orange Digital Center");
 
-        //return AdminDto.fromEntity(
-          //      adminRepository.save(
-            //            AdminDto.toEntity(adminDto)
-              //  )
-        //);
-        return adminDto;
+        return AdminDto.fromEntity(
+                adminRepository.save(
+                        AdminDto.toEntity(adminDto)
+                )
+        );
     }
 
     @Override
@@ -81,6 +80,7 @@ public class AdminServiceImpl implements AdminService {
         admin.setPhone(adminDto.getPhone());
         admin.setAdresse(adminDto.getAddresse());
         admin.setCni(adminDto.getCni());
+        admin.setArchive(adminDto.isIsbloqued());
         if (structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).isPresent())
             admin.setStructure(structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).get());
 
