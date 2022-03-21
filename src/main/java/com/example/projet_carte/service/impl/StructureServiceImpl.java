@@ -78,7 +78,7 @@ public class StructureServiceImpl implements StructureService {
     @Override
     public void debloquerStructure(Long id) {
         if (id != null) {
-            Structure structure = structureRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+            Structure structure = structureRepository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException(
                             "Aucun Structure avec l'ID = " + id + " ne se trouve dans la BDD"));
 

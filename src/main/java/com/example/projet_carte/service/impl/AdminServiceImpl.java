@@ -111,7 +111,7 @@ public class AdminServiceImpl implements AdminService {
             log.error("Admin id is null");
         }
 
-        Admin admin = adminRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+        Admin admin = adminRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(
                         "Aucun admin avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.ADMIN_NOT_FOUND));

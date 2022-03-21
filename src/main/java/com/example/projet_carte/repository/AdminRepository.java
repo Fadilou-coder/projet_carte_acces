@@ -10,6 +10,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     List<Admin> findAll();
     Optional<Admin> findByIdAndArchiveFalse(Long id);
+    Optional<Admin> findById(Long id);
 
     Optional<Admin> findByEmailAndArchiveFalse(String email);
 
