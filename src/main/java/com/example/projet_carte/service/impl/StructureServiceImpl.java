@@ -26,7 +26,7 @@ public class StructureServiceImpl implements StructureService {
 
     @Override
     public List<StructureDto> findAll() {
-        return structureRepository.findAllByArchiveFalse().stream().map(StructureDto::fromEntity).collect(Collectors.toList());
+        return structureRepository.findAll().stream().map(StructureDto::fromEntity).collect(Collectors.toList());
     }
 
     @Override
