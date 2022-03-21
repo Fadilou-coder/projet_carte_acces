@@ -15,4 +15,6 @@ public interface StructureService {
     StructureDto put(StructureDto structureDto, Long id) throws IOException;
 
     void delete(Long id);
+
+    void debloquerStructure(Long id);
 }

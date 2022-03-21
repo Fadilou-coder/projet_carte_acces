@@ -39,4 +39,9 @@ public class StructureController implements StructureApi {
     public StructureDto put(StructureDto structureDto, Long id) throws IOException {
         return structureService.put(structureDto, id);
     }
+
+    @Override
+    public void debloquerStructure(Long id) {
+        structureService.debloquerStructure(id);
+    }
 }

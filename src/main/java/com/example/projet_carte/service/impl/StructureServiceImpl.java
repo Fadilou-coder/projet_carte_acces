@@ -1,9 +1,7 @@
 package com.example.projet_carte.service.impl;
 
-import com.example.projet_carte.dto.AdminDto;
 import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
-import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.AdminRepository;
@@ -71,6 +69,22 @@ public class StructureServiceImpl implements StructureService {
             structure.setArchive(true);
             structure.getAdmins().forEach(admin -> {
                 admin.setArchive(true);
+            });
+            structureRepository.flush();
+            adminRepository.flush();
+        }
+    }
+
+    @Override
+    public void debloquerStructure(Long id) {
+        if (id != null) {
+            Structure structure = structureRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                    new EntityNotFoundException(
+                            "Aucun Structure avec l'ID = " + id + " ne se trouve dans la BDD"));
+
+            structure.setArchive(false);
+            structure.getAdmins().forEach(admin -> {
+                admin.setArchive(false);
             });
             structureRepository.flush();
             adminRepository.flush();

@@ -23,4 +23,7 @@ public interface StructureApi {
 
     @PutMapping("/structures/{id}")
     StructureDto put(@RequestBody StructureDto structureDto, @PathVariable Long id) throws IOException;
+
+    @PutMapping("/structures/debloquer/{id}")
+    void debloquerStructure(@PathVariable Long id);
 }

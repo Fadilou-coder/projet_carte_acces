@@ -16,4 +16,6 @@ public interface AdminService {
     AdminDto put(AdminDto adminDto, Long id) throws IOException;
 
     void delete(Long id);
+
+    void debloquerAdmin(Long id);
 }

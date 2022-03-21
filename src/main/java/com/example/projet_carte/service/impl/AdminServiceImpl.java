@@ -105,6 +105,20 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.flush();
     }
 
+    @Override
+    public void debloquerAdmin(Long id){
+        if (id == null) {
+            log.error("Admin id is null");
+        }
+
+        Admin admin = adminRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun admin avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.ADMIN_NOT_FOUND));
+        admin.setArchive(false);
+        adminRepository.flush();
+    }
+
     private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
