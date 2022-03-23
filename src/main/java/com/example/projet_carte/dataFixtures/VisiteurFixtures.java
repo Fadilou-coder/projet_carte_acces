@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(4)
+@Order(5)
 public class VisiteurFixtures implements CommandLineRunner {
 
     VisiteurRepository visiteurRepository;
@@ -20,7 +20,7 @@ public class VisiteurFixtures implements CommandLineRunner {
     public void run(String... args) throws Exception {
         for (int i = 0; i < 15; i++) {
                 visiteurRepository.save(
-                        new Visiteur("prenom_visiteur"+i+1, "nom_visiteur"+i+1, "100000000000"+i, "77000000"+i)
+                        new Visiteur("prenom_visiteur"+(i+1), "nom_visiteur"+(i+1), "100000000000"+i, "77000000"+i)
                 );
         }
     }

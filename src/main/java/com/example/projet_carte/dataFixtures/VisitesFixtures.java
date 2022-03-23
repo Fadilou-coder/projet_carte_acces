@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(5)
+@Order(6)
 public class VisitesFixtures implements CommandLineRunner {
 
     VisiteRepository visiteReposity;

@@ -17,10 +17,10 @@ public class SuperAdminValidator {
 
     public static List<String> validate(SuperAdminDto superAdminDto)
     {
-        return getString(superAdminDto == null, superAdminDto.getCni(), superAdminDto.getPrenom(), superAdminDto.getNom(), superAdminDto.getPhone(), superAdminDto.getEmail(), superAdminDto.getPassword(), superAdminDto.getUsername(), superAdminDto.getAddresse(), superAdminDto.getId());
+        return getString(superAdminDto == null, superAdminDto.getCni(), superAdminDto.getPrenom(), superAdminDto.getNom(), superAdminDto.getPhone(), superAdminDto.getEmail(), superAdminDto.getPassword(), superAdminDto.getAddresse(), superAdminDto.getId());
     }
 
-    public static List<String> getString(boolean isStructure, String cni, String prenom, String nom, String num, String email, String password, String username, String adresse, Long id)
+    public static List<String> getString(boolean isStructure, String cni, String prenom, String nom, String num, String email, String password, String adresse, Long id)
     {
         List<String> errors = new ArrayList<>();
 
@@ -63,10 +63,6 @@ public class SuperAdminValidator {
         if (!StringUtils.hasLength(email))
         {
             errors.add("Veuillez renseigner l'email du super admin");
-        }
-        if (!StringUtils.hasLength(username))
-        {
-            errors.add("Veuillez renseigner le username du super admin");
         }
         if (!StringUtils.hasLength(password))
         {

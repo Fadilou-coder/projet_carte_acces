@@ -12,7 +12,7 @@ public interface SuperAdminApi{
     @GetMapping("/superAdmins")
     List<SuperAdminDto> findAll();
 
-    @GetMapping("/superAdmin/{cni}")
+    @GetMapping("/superAdmin/cni/{cni}")
     SuperAdminDto findByCni(@PathVariable String cni);
 
     @PostMapping("/superAdmin/create")
@@ -20,6 +20,9 @@ public interface SuperAdminApi{
 
     @PutMapping("/superAdmin/{id}")
     SuperAdminDto update(@RequestBody SuperAdminDto superAdminDto, @PathVariable Long id);
+
+    @GetMapping("/superAdmin/{id}")
+    SuperAdminDto findById(@PathVariable Long id);
 
     @DeleteMapping("/superAdmin/{id}")
     SuperAdminDto delete(@PathVariable Long id);

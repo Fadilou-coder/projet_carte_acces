@@ -10,6 +10,8 @@ public interface StructureRepository extends JpaRepository<Structure, Long> {
 
     Optional<Structure> findByIdAndArchiveFalse(Long id);
 
+    Optional<Structure> findById(Long id);
+
     Optional<Structure> findByNomStructureAndArchiveFalse(String nomStructure);
 
     List<Structure> findAllByArchiveFalse();

@@ -15,6 +15,7 @@ public class StructureDto {
 
     private Long id;
     private String nomStructure;
+    private Boolean isBlocked;
 
     @JsonIgnore
     private Collection<AdminDto> admins;
@@ -25,6 +26,7 @@ public class StructureDto {
         return StructureDto.builder()
                 .id(structure.getId())
                 .nomStructure(structure.getNomStructure())
+                .isBlocked(structure.isArchive())
                 .build();
 
     }
@@ -35,6 +37,7 @@ public class StructureDto {
             Structure structure = new Structure();
             structure.setId(structureDto.getId());
             structure.setNomStructure(structureDto.getNomStructure());
+            structure.setArchive(structureDto.isBlocked);
             if (structureDto.getAdmins() != null){
                 structure.setAdmins(structureDto.getAdmins().stream().map(AdminDto::toEntity).collect(Collectors.toList()));
             }

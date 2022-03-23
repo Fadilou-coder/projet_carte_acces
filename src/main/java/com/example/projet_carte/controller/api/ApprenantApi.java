@@ -19,6 +19,15 @@ public interface ApprenantApi {
     @GetMapping("/apprenants/{id}")
     ApprenantDto findById(@PathVariable Long id);
 
+    @GetMapping("/referentiel/{id}/apprenants")
+    List<ApprenantDto> findByref(@PathVariable Long id);
+
+    @GetMapping("/promo/{id}/apprenants")
+    List<ApprenantDto> findBypromo(@PathVariable Long id);
+
+    @GetMapping("/referentiel/{idRef}/promo/{idPr}/apprenants")
+    List<ApprenantDto> findByRefByPromo(@PathVariable Long idRef, @PathVariable Long idPr);
+
     @PostMapping("/apprenants/create")
     ApprenantDto save(
             @RequestParam("prenom") String prenom ,
@@ -28,10 +37,19 @@ public interface ApprenantApi {
             @RequestParam("adresse") String adresse,
             @RequestParam("cni") String cni,
             @RequestParam("referentiel") String referentiel,
+            @RequestParam("promo") String promo,
             @RequestParam("dateNaissance") String dateNaissance,
             @RequestParam("lieuNaissance") String lieuNaissance,
             @RequestParam("numTuteur") String numTuteur,
             @RequestParam("avatar") MultipartFile avatar
+    ) throws IOException;
+
+    @PostMapping("/apprenants/sendMail")
+    void sendCarte(
+            @RequestParam("prenom") String prenom ,
+            @RequestParam("nom") String nom,
+            @RequestParam("email") String email ,
+            @RequestParam("file") MultipartFile file
     ) throws IOException;
 
     @PutMapping("/apprenants/{id}")
@@ -42,7 +60,6 @@ public interface ApprenantApi {
                      @RequestParam("phone") String phone,
                      @RequestParam("adresse") String adresse,
                      @RequestParam("cni") String cni,
-                     @RequestParam("referentiel") String referentiel,
                      @RequestParam("dateNaissance") String dateNaissance,
                      @RequestParam("lieuNaissance") String lieuNaissance,
                      @RequestParam("numTuteur") String numTuteur,

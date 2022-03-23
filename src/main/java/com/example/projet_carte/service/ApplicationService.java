@@ -5,7 +5,7 @@ import com.example.projet_carte.model.*;
 
 public interface ApplicationService {
 
-    Admin findUserByUsernameAdmin(String username);
+    Admin findUserByEmailAdmin(String username);
 
-    SuperAdmin findUserByUsernameSuperAdmin(String username);
+    SuperAdmin findUserByEmailSuperAdmin(String username);
 }

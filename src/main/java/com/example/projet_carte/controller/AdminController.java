@@ -39,4 +39,9 @@ public class AdminController implements AdminApi {
         return adminService.put(adminDto, id);
     }
 
+    @Override
+    public void debloquerAdmin(Long id) {
+        adminService.debloquerAdmin(id);
+    }
+
 }

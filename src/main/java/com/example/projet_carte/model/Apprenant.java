@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -31,9 +30,12 @@ public class Apprenant extends Personne {
     @ManyToOne
     private Referentiel referentiel;
 
+    @ManyToOne
+    private Promo promo;
+
     public Apprenant( String prenom, String nom, String email, String phone,
                       String adresse, String cni, String code, Referentiel referentiel,
-                      LocalDate dateNaissance, String lieuNaissance,String numTuteur
+                      LocalDate dateNaissance, String lieuNaissance,String numTuteur, Promo promo
     ){
         super(prenom, nom, email, phone, adresse, cni );
         this.code = code;
@@ -41,5 +43,7 @@ public class Apprenant extends Personne {
         this.dateNaissance = dateNaissance;
         this.lieuNaissance = lieuNaissance;
         this.numTuteur = numTuteur;
+        this.promo = promo;
     }
+
 }

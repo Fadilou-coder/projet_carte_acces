@@ -64,7 +64,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         superAdmin.setNom(superAdmin.getNom());
         superAdmin.setCni(superAdminDto.getCni());
         superAdmin.setPhone(superAdminDto.getPhone());
-        superAdmin.setUsername(superAdminDto.getUsername());
         superAdmin.setPassword(encoder.encode(superAdminDto.getPassword()));
 
         superAdminRepository.flush();
@@ -85,10 +84,21 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         return SuperAdminDto.fromEntity(superAdmin);
     }
 
+    @Override
+    public SuperAdminDto findById(Long id) {
+        if (id == null) return null;
+        SuperAdmin superAdmin = superAdminRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun utilisateur avec le cni = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND)
+        );
+        return SuperAdminDto.fromEntity(superAdmin);
+    }
+
     private void validation(SuperAdminDto superAdminDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(superAdminDto);
 
-        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superAdminDto.getUsername(), adminRepository, superAdminDto.getCni(), superAdminDto.getEmail(), superAdminDto.getPhone());
+        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superAdminDto.getEmail(), adminRepository, superAdminDto.getCni(), superAdminDto.getEmail(), superAdminDto.getPhone());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.ADMIN_NOT_VALID, errors);

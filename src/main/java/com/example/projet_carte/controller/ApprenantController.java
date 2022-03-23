@@ -28,16 +28,36 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel,
+    public List<ApprenantDto> findByref(Long id) {
+        return apprenantService.findByref(id);
+    }
+
+    @Override
+    public List<ApprenantDto> findBypromo(Long id) {
+        return apprenantService.findBypromo(id);
+    }
+
+    @Override
+    public List<ApprenantDto> findByRefByPromo(Long idRef, Long idPr) {
+        return apprenantService.findByRefByPromo(idRef, idPr);
+    }
+
+    @Override
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel, String promo,
                              String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return  apprenantService.save(prenom, nom, email, phone, adresse, cni, referentiel,
+        return  apprenantService.save(prenom, nom, email, phone, adresse, cni, referentiel, promo,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 
     @Override
-    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel,
+    public void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException {
+        apprenantService.sendCarte(prenom, nom, email, file);
+    }
+
+    @Override
+    public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String cni,
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni, referentiel,
+        return apprenantService.put(id, prenom, nom, email, phone, adresse, cni,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 
