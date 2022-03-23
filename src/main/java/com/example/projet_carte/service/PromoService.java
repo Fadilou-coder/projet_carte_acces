@@ -7,4 +7,5 @@ import java.util.List;
 public interface PromoService {
 
     List<PromoDto> findAll();
+    PromoDto save(PromoDto promoDto);
 }

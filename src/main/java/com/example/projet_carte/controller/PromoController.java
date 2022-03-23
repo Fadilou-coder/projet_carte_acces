@@ -18,4 +18,9 @@ public class PromoController implements PromoApi {
     public List<PromoDto> findAll() {
         return service.findAll();
     }
+
+    @Override
+    public PromoDto save(PromoDto promoDto) {
+        return service.save(promoDto);
+    }
 }

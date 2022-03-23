@@ -12,6 +12,7 @@ public enum ErrorCodes {
     ADMIN_NOT_FOUND(3000),
     ADMIN_NOT_VALID(3001),
     ADMIN_ALREADY_IN_USE(3002);
+
     private int code;
 
     ErrorCodes(int code) {
