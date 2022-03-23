@@ -68,9 +68,9 @@ public class ApprenantServiceImpl implements ApprenantService {
 
         Random random = new Random();
         if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
-            String code = promoRepository.findByLibelle(promo).get().getLibelle() + (random.nextInt((9999 - 1000) + 1) + 1);
+            String code = promoRepository.findByLibelle(promo).get().getAnnee() + (random.nextInt(9999 - 1000)+ 1001);
             while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
-                code = promoRepository.findByLibelle(promo).get().getLibelle() + (random.nextInt(9999 - 1001) + 1001);
+                code = promoRepository.findByLibelle(promo).get().getAnnee() + (random.nextInt(9999 - 1001) + 1001);
             }
             ApprenantDto apprenantDto = new ApprenantDto(
                     null, prenom, nom, email, phone, adresse, cni, code,
@@ -79,11 +79,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             );
 
             validation(apprenantDto);
-            return ApprenantDto.fromEntity(
-                    apprenantRepository.save(
-                            ApprenantDto.toEntity(apprenantDto)
-                    )
-            );
+            return ApprenantDto.fromEntity(apprenantRepository.save(ApprenantDto.toEntity(apprenantDto)));
         }
         throw new InvalidEntityException("le referentiel ou la promo choisi(e) n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
     }
