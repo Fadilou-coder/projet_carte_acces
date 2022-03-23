@@ -2,6 +2,7 @@ package com.example.projet_carte.service.impl;
 
 import com.example.projet_carte.EmailSenderService;
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.PromoDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
@@ -12,6 +13,7 @@ import com.example.projet_carte.model.Personne;
 import com.example.projet_carte.model.Referentiel;
 import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.ApprenantRepository;
+import com.example.projet_carte.repository.PromoRepository;
 import com.example.projet_carte.repository.ReferentielRepository;
 import com.example.projet_carte.repository.UserRepository;
 import com.example.projet_carte.service.ApprenantService;
@@ -34,6 +36,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     ApprenantRepository apprenantRepository;
     UserRepository userRepository;
     ReferentielRepository referentielRepository;
+    PromoRepository promoRepository;
     EmailSenderService emailSenderService;
 
     @Override
@@ -51,16 +54,27 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public List<ApprenantDto> findBypromo(Long id) {
+        return apprenantRepository.findByPromoIdAndArchiveFalse(id).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApprenantDto> findByRefByPromo(Long idRef, Long idPr) {
+        return apprenantRepository.findByPromoIdAndReferentielIdAndArchiveFalse(idPr, idRef).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         Random random = new Random();
-        String code = "2022" + (random.nextInt((9999 - 1000) + 1) + 1);
-        while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
-            code = "2022" + (random.nextInt((9999 - 1000) + 1) + 1);
-        }
-        if (referentielRepository.findByLibelle(referentiel).isPresent()) {
+        if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
+            String code = promoRepository.findByLibelle(promo).get().getLibelle() + (random.nextInt((9999 - 1000) + 1) + 1);
+            while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
+                code = promoRepository.findByLibelle(promo).get().getLibelle() + (random.nextInt(9999 - 1001) + 1001);
+            }
             ApprenantDto apprenantDto = new ApprenantDto(
-                    null, prenom, nom, email, phone, adresse, cni, code, ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()),
+                    null, prenom, nom, email, phone, adresse, cni, code,
+                    ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
                     LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
             );
 
@@ -71,7 +85,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                     )
             );
         }
-        throw new InvalidEntityException("le referentiel n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
+        throw new InvalidEntityException("le referentiel ou la promo choisi(e) n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
     }
 
     @Override

@@ -13,7 +13,7 @@ package com.example.projet_carte.dataFixtures;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(1)
+@Order(2)
 public class ReferentielFixture implements CommandLineRunner {
 
     private ReferentielRepository referentielRepository;
@@ -22,7 +22,7 @@ public class ReferentielFixture implements CommandLineRunner {
     public void run(String... args) {
         referentielRepository.saveAll(Arrays.asList(
                 new Referentiel("Dev web"),
-                new Referentiel("Referentiel Digital"),
+                new Referentiel("Referent Digital"),
                 new Referentiel("Data Scientist")
        ));
     }

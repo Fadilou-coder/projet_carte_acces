@@ -14,6 +14,10 @@ public interface ApprenantService {
 
     List<ApprenantDto> findByref(Long id);
 
+    List<ApprenantDto> findBypromo(Long id);
+
+    List<ApprenantDto> findByRefByPromo(Long idRef, Long idPr);
+
     ApprenantDto save(
             String prenom,
             String nom,
@@ -21,7 +25,8 @@ public interface ApprenantService {
             String phone,
             String adresse,
             String cni,
-            String referentielDto,
+            String referentiel,
+            String promo,
             String dateNaissance,
             String lieuNaissance,
             String numTuteur,

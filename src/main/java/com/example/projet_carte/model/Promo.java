@@ -6,11 +6,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Collection;
 
-
 @Entity
-@Data
 @NoArgsConstructor
-public class Referentiel {
+@Data
+public class Promo {
+
+    public Promo(String libelle, String annee) {
+        this.libelle = libelle;
+        this.annee = annee;
+    }
 
     @Id
     @GeneratedValue
@@ -19,10 +23,10 @@ public class Referentiel {
     @Column(unique=true)
     private String libelle;
 
-    public Referentiel(String libelle) {
-        this.libelle = libelle;
-    }
+    private String annee;
 
-    @OneToMany(mappedBy = "referentiel")
+    @OneToMany(mappedBy = "promo")
     private Collection<Apprenant> apprenants;
+
+    private boolean archive = false;
 }

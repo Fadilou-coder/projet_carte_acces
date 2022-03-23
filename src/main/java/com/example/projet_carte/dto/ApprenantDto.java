@@ -22,6 +22,7 @@ public class ApprenantDto {
     private String cni;
     private String code;
     private ReferentielDto referentiel;
+    private PromoDto promo;
     private LocalDate dateNaissance;
     private String lieuNaissance;
     private String numTuteur;
@@ -42,6 +43,7 @@ public class ApprenantDto {
                 .cni(apprenant.getCni())
                 .code(apprenant.getCode())
                 .referentiel(ReferentielDto.fromEntity(apprenant.getReferentiel()))
+                .promo(PromoDto.fromEntity(apprenant.getPromo()))
                 .dateNaissance(apprenant.getDateNaissance())
                 .lieuNaissance(apprenant.getLieuNaissance())
                 .numTuteur(apprenant.getNumTuteur())
@@ -64,6 +66,7 @@ public class ApprenantDto {
         apprenant.setCni(apprenantDto.getCni());
         apprenant.setCode(apprenantDto.getCode());
         apprenant.setReferentiel(ReferentielDto.toEntity(apprenantDto.getReferentiel()));
+        apprenant.setPromo(PromoDto.toEntity(apprenantDto.getPromo()));
         apprenant.setDateNaissance(apprenantDto.getDateNaissance());
         apprenant.setLieuNaissance(apprenantDto.getLieuNaissance());
         apprenant.setNumTuteur(apprenantDto.getNumTuteur());

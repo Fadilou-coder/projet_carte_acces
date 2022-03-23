@@ -18,7 +18,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(2)
+@Order(3)
 public class AdminFixture implements CommandLineRunner {
 
     private AdminRepository adminRepository;
@@ -32,11 +32,11 @@ public class AdminFixture implements CommandLineRunner {
         String encodedPassword = passwordEncoder.encode(password);
 
         adminRepository.saveAll(Arrays.asList(
-                new Admin("Omar", "Faye", "omzo@gmail.com", "777777777", "Scat Urbain", "1123123401234", encodedPassword, structureRepository.findAll().get(0)),
-                new Admin("Mamadou", "Sylla", "sylla@gmail.com", "707777777", "Dakar", "1123123401235", encodedPassword, structureRepository.findAll().get(0))
+                new Admin("Omar", "Faye", "omzo@gmail.com", "777777777", "Scat Urbain", "1113123401234", encodedPassword, structureRepository.findAll().get(0)),
+                new Admin("Mamadou", "Sylla", "sylla@gmail.com", "707777777", "Dakar", "1113123401235", encodedPassword, structureRepository.findAll().get(0))
         ));
 
-        superAdminRepository.save(new SuperAdmin("Babacar", "Goudiaby", "cbag@gmail.com", "787777777", "Guédiawaye", "1123123401245", encodedPassword));
+        superAdminRepository.save(new SuperAdmin("Babacar", "Goudiaby", "cbag@gmail.com", "787777777", "Guédiawaye", "1113123401245", encodedPassword));
 
     }
 }

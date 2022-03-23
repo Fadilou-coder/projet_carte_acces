@@ -22,6 +22,12 @@ public interface ApprenantApi {
     @GetMapping("/referentiel/{id}/apprenants")
     List<ApprenantDto> findByref(@PathVariable Long id);
 
+    @GetMapping("/promo/{id}/apprenants")
+    List<ApprenantDto> findBypromo(@PathVariable Long id);
+
+    @GetMapping("/referentiel/{idRef}/promo/{idPr}/apprenants")
+    List<ApprenantDto> findByRefByPromo(@PathVariable Long idRef, @PathVariable Long idPr);
+
     @PostMapping("/apprenants/create")
     ApprenantDto save(
             @RequestParam("prenom") String prenom ,
@@ -31,6 +37,7 @@ public interface ApprenantApi {
             @RequestParam("adresse") String adresse,
             @RequestParam("cni") String cni,
             @RequestParam("referentiel") String referentiel,
+            @RequestParam("promo") String promo,
             @RequestParam("dateNaissance") String dateNaissance,
             @RequestParam("lieuNaissance") String lieuNaissance,
             @RequestParam("numTuteur") String numTuteur,
