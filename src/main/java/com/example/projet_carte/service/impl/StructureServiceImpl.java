@@ -1,5 +1,6 @@
 package com.example.projet_carte.service.impl;
 
+import com.example.projet_carte.dto.AdminDto;
 import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.InvalidEntityException;
@@ -44,6 +45,11 @@ public class StructureServiceImpl implements StructureService {
                 new EntityNotFoundException(
                         "Aucun Structure avec l'ID = " + id + " ne se trouve dans la BDD")
         );
+    }
+
+    @Override
+    public List<AdminDto> findAdminByStructure(Long id) {
+        return adminRepository.findAllByStructureId(id).stream().map(AdminDto::fromEntity).collect(Collectors.toList());
     }
 
     @Override

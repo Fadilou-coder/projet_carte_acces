@@ -1,6 +1,7 @@
 package com.example.projet_carte.controller;
 
 import com.example.projet_carte.controller.api.StructureApi;
+import com.example.projet_carte.dto.AdminDto;
 import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.service.StructureService;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,11 @@ public class StructureController implements StructureApi {
     @Override
     public StructureDto findById(Long id) {
         return structureService.findById(id);
+    }
+
+    @Override
+    public List<AdminDto> findAdminByStructure(Long id) {
+        return structureService.findAdminByStructure(id);
     }
 
     @Override

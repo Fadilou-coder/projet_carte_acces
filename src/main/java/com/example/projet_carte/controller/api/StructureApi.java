@@ -1,5 +1,6 @@
 package com.example.projet_carte.controller.api;
 
+import com.example.projet_carte.dto.AdminDto;
 import com.example.projet_carte.dto.StructureDto;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public interface StructureApi {
 
     @GetMapping("/structures/{id}")
     StructureDto findById(@PathVariable Long id);
+
+    @GetMapping("/structures/{id}/admin")
+    List<AdminDto> findAdminByStructure(@PathVariable Long id);
 
     @DeleteMapping("/structures/{id}")
     void delete(@PathVariable Long id);
