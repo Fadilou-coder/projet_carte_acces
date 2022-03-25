@@ -75,7 +75,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             ApprenantDto apprenantDto = new ApprenantDto(
                     null, prenom, nom, email, phone, adresse, cni, code,
                     ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
-                    LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
+                    LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, avatar.getBytes(), null
             );
 
             validation(apprenantDto);
@@ -126,7 +126,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
         apprenant.setLieuNaissance(lieuNaissance);
         apprenant.setNumTuteur(numTuteur);
-        apprenant.setAvatar(compressBytes(avatar.getBytes()));
+        apprenant.setAvatar(avatar.getBytes());
 
         ApprenantDto apprenantDto = ApprenantDto.fromEntity(apprenant);
         validation(apprenantDto);
@@ -147,29 +147,6 @@ public class ApprenantServiceImpl implements ApprenantService {
                         ErrorCodes.APPRENANT_NOT_FOUND));
         apprenant.setArchive(true);
         apprenantRepository.flush();
-    }
-
-    public static byte[] compressBytes(byte[] data) {
-
-        Deflater deflater = new Deflater();
-        deflater.setInput(data);
-        deflater.finish();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] buffer = new byte[1024];
-        while (!deflater.finished()) {
-            int count = deflater.deflate(buffer);
-            outputStream.write(buffer, 0, count);
-        }
-        try {
-            outputStream.close();
-        } catch (IOException ignor) {
-            ignor.printStackTrace();
-        }
-        System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
-        if (outputStream.toByteArray().length == 8) return null;
-
-        return outputStream.toByteArray();
     }
 
     private void validation(ApprenantDto apprenantDto) {
