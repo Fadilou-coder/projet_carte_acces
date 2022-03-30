@@ -72,7 +72,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             ApprenantDto apprenantDto = new ApprenantDto(
                     null, prenom, nom, email, phone, adresse, cni, code,
                     ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
-                    LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, compressBytes(avatar.getBytes()), null
+                    LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, avatar.getBytes(), null
             );
 
             validation(apprenantDto);
@@ -114,16 +114,37 @@ public class ApprenantServiceImpl implements ApprenantService {
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
 
-        apprenant.setPrenom(prenom);
-        apprenant.setNom(nom);
-        apprenant.setEmail(email);
-        apprenant.setPhone(phone);
-        apprenant.setAdresse(adresse);
-        apprenant.setCni(cni);
-        apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
-        apprenant.setLieuNaissance(lieuNaissance);
-        apprenant.setNumTuteur(numTuteur);
-        apprenant.setAvatar(compressBytes(avatar.getBytes()));
+        if (!Objects.equals(prenom, "")) {
+            apprenant.setPrenom(prenom);
+        }
+
+        if (!Objects.equals(nom, "")) {
+            apprenant.setNom(nom);
+        }
+        if (!Objects.equals(email, "")) {
+            apprenant.setEmail(email);
+        }
+        if (!Objects.equals(phone, "")) {
+            apprenant.setPhone(phone);
+        }
+        if (!Objects.equals(adresse, "")) {
+            apprenant.setAdresse(adresse);
+        }
+        if (!Objects.equals(cni, "")) {
+            apprenant.setCni(cni);
+        }
+        if (!Objects.equals(dateNaissance, "")) {
+            apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
+        }
+        if (!Objects.equals(lieuNaissance, "")) {
+            apprenant.setLieuNaissance(lieuNaissance);
+        }
+        if (!Objects.equals(numTuteur, "")) {
+            apprenant.setNumTuteur(numTuteur);
+        }
+        if (!avatar.isEmpty()) {
+            apprenant.setAvatar(avatar.getBytes());
+        }
 
         ApprenantDto apprenantDto = ApprenantDto.fromEntity(apprenant);
         validation(apprenantDto);
@@ -144,29 +165,6 @@ public class ApprenantServiceImpl implements ApprenantService {
                         ErrorCodes.APPRENANT_NOT_FOUND));
         apprenant.setArchive(true);
         apprenantRepository.flush();
-    }
-
-    public static byte[] compressBytes(byte[] data) {
-
-        Deflater deflater = new Deflater();
-        deflater.setInput(data);
-        deflater.finish();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-        byte[] buffer = new byte[1024];
-        while (!deflater.finished()) {
-            int count = deflater.deflate(buffer);
-            outputStream.write(buffer, 0, count);
-        }
-        try {
-            outputStream.close();
-        } catch (IOException ignor) {
-            ignor.printStackTrace();
-        }
-        System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
-        if (outputStream.toByteArray().length == 8) return null;
-
-        return outputStream.toByteArray();
     }
 
     private void validation(ApprenantDto apprenantDto) {
