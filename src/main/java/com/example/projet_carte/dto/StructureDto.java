@@ -17,6 +17,10 @@ public class StructureDto {
     private String nomStructure;
     private Boolean isBlocked;
 
+    public StructureDto(Long id) {
+        this.id = id;
+    }
+
     @JsonIgnore
     private Collection<AdminDto> admins;
 
@@ -34,13 +38,13 @@ public class StructureDto {
     public static Structure toEntity(StructureDto structureDto){
         if(structureDto == null) return null;
 
-            Structure structure = new Structure();
-            structure.setId(structureDto.getId());
-            structure.setNomStructure(structureDto.getNomStructure());
-            structure.setArchive(structureDto.isBlocked);
-            if (structureDto.getAdmins() != null){
-                structure.setAdmins(structureDto.getAdmins().stream().map(AdminDto::toEntity).collect(Collectors.toList()));
-            }
+        Structure structure = new Structure();
+        structure.setId(structureDto.getId());
+        structure.setNomStructure(structureDto.getNomStructure());
+        structure.setArchive(structureDto.isBlocked);
+        if (structureDto.getAdmins() != null){
+            structure.setAdmins(structureDto.getAdmins().stream().map(AdminDto::toEntity).collect(Collectors.toList()));
+        }
         return structure;
     }
 }
