@@ -1,7 +1,6 @@
 package com.example.projet_carte.dto;
 
 import com.example.projet_carte.model.Promo;
-import com.example.projet_carte.model.Referentiel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,6 @@ public class PromoDto {
         if(promoDto == null) return null;
 
         Promo promo = new Promo();
-
         promo.setId(promoDto.getId());
         promo.setLibelle(promoDto.getLibelle());
         promo.setAnnee(promoDto.getAnnee());

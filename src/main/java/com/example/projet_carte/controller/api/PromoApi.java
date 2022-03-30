@@ -16,5 +16,4 @@ public interface PromoApi {
 
     @PostMapping("/promos/create")
     PromoDto save(@RequestBody PromoDto promoDto);
-
 }
