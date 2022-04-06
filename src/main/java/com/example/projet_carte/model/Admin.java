@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 public class Admin extends Personne {
 
     public Admin(String prenom, String nom, String email, String phone,
-                 String adresse, String typePiece, String numPiece, String password){
-        super(prenom, nom, email, phone, adresse, typePiece, numPiece, password, "ADMIN" );
+                 String adresse, String typePiece, String numPiece, String sexe, String password){
+        super(prenom, nom, email, phone, adresse, typePiece, numPiece, sexe, password, "ADMIN" );
     }
 }

@@ -34,6 +34,8 @@ public class Personne {
 
     protected String numPiece;
 
+    protected String sexe;
+
     private String password;
 
     private String role = "ADMIN";
@@ -41,7 +43,7 @@ public class Personne {
     private boolean archive = false;
 
     public Personne(String prenom, String nom, String email, String phone,
-                    String adresse, String typePiece, String numPiece, String password, String role){
+                    String adresse, String typePiece, String numPiece, String sexe, String password, String role){
         this.prenom = prenom;
         this.nom = nom;
         this.email = email;
@@ -49,6 +51,7 @@ public class Personne {
         this.adresse = adresse;
         this.numPiece = numPiece;
         this.typePiece = typePiece;
+        this.sexe = sexe;
         this.password = password;
         this.role = role;
     }
