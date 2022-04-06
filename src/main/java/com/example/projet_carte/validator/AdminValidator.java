@@ -1,8 +1,6 @@
 package com.example.projet_carte.validator;
 
 import com.example.projet_carte.dto.AdminDto;
-import com.example.projet_carte.dto.StructureDto;
-import com.example.projet_carte.model.Structure;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ public class AdminValidator {
             errors.add("Veuillez renseigner le numero de telephone'");
             errors.add("Veuillez renseigner l'adresse'");
             errors.add("Veuillez renseigner la carte d'identité'");
-            errors.add("Veuillez renseigner le username'");
             errors.add("Veuillez renseigner le structure'");
             return errors;
         }
