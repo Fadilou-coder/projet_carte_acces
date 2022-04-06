@@ -67,7 +67,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String cni, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         Random random = new Random();
         if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
@@ -76,7 +76,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                 code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
             }
             ApprenantDto apprenantDto = new ApprenantDto(
-                    null, prenom, nom, email, phone, adresse, cni, code,
+                    null, prenom, nom, email, phone, adresse, typePiece, numPiece, code,
                     ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
                     LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, avatar.getBytes(), null
             );
@@ -90,7 +90,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     @Override
     public List<ApprenantDto> saveFromCsv(MultipartFile file) {
         String TYPE = "text/csv";
-        String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
+        String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "TypePiece", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
         List<ApprenantDto> apps = new ArrayList<>();
         if (TYPE.equals(file.getContentType())) {
             try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
@@ -105,6 +105,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                             csvRecord.get("email"),
                             csvRecord.get("phone"),
                             csvRecord.get("adresse"),
+                            csvRecord.get("typePiece"),
                             csvRecord.get("numPiece"),
                             null,
                             ReferentielDto.fromEntity(referentielRepository.findByLibelle(csvRecord.get("referentiel")).get()),
@@ -130,7 +131,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
                 for(int i=0; i<sheet.getPhysicalNumberOfRows();i++) {
                     XSSFRow row = sheet.getRow(i);
-                    if (row.getPhysicalNumberOfCells() == 11){
+                    if (row.getPhysicalNumberOfCells() == 12){
                         if (i == 0){
                             for(int j=0;j<row.getPhysicalNumberOfCells();j++) {
                                 if (!Objects.equals(HEADERs[j], row.getCell(j).toString()))
@@ -151,14 +152,15 @@ public class ApprenantServiceImpl implements ApprenantService {
                                         row.getCell(3).toString(),
                                         row.getCell(4).toString(),
                                         row.getCell(5).toString(),
+                                        row.getCell(6).toString(),
                                         code,
-                                        referentielRepository.findByLibelle(row.getCell(6).toString()).isPresent() ?
+                                        referentielRepository.findByLibelle(row.getCell(7).toString()).isPresent() ?
                                                 ReferentielDto.fromEntity(referentielRepository.findByLibelle(row.getCell(6).toString()).get()) : null,
-                                        promoRepository.findByLibelle(row.getCell(7).toString()).isPresent() ?
+                                        promoRepository.findByLibelle(row.getCell(8).toString()).isPresent() ?
                                                 PromoDto.fromEntity(promoRepository.findByLibelle(row.getCell(7).toString()).get()) : null,
-                                        row.getCell(8).getLocalDateTimeCellValue().toLocalDate(),
-                                        row.getCell(9).toString(),
+                                        row.getCell(9).getLocalDateTimeCellValue().toLocalDate(),
                                         row.getCell(10).toString(),
+                                        row.getCell(11).toString(),
                                         null,
                                         new ArrayList<>()
                                 );
