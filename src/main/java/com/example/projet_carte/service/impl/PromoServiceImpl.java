@@ -33,7 +33,6 @@ public class PromoServiceImpl implements PromoService {
     public PromoDto save(PromoDto promoDto) {
         if (Objects.equals(promoDto.getLibelle(), ""))
             throw new InvalidEntityException("Veuillez renseignez le libelle de la promo");
-        System.out.println(promoDto.getDateDebut());
 
         return PromoDto.fromEntity(promoRepository.save(PromoDto.toEntity(promoDto)));
     }
