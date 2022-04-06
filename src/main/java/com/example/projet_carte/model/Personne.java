@@ -30,19 +30,27 @@ public class Personne {
 
     protected String adresse;
 
-    @Column(unique=true)
-    protected String cni;
+    protected String typePiece;
+
+    protected String numPiece;
+
+    private String password;
+
+    private String role = "ADMIN";
 
     private boolean archive = false;
 
     public Personne(String prenom, String nom, String email, String phone,
-                    String adresse, String cni){
+                    String adresse, String typePiece, String numPiece, String password, String role){
         this.prenom = prenom;
         this.nom = nom;
         this.email = email;
         this.phone = phone;
         this.adresse = adresse;
-        this.cni = cni;
+        this.numPiece = numPiece;
+        this.typePiece = typePiece;
+        this.password = password;
+        this.role = role;
     }
 
 }

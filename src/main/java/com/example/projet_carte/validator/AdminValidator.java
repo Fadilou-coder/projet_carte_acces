@@ -1,8 +1,6 @@
 package com.example.projet_carte.validator;
 
 import com.example.projet_carte.dto.AdminDto;
-import com.example.projet_carte.dto.StructureDto;
-import com.example.projet_carte.model.Structure;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -12,12 +10,12 @@ public class AdminValidator {
 
     public static List<String> validateAd(AdminDto adminDto) {
         return getStrings(adminDto == null, adminDto.getPrenom(), adminDto.getNom(),adminDto.getEmail(),adminDto.getPhone(),
-                adminDto.getAddresse(), adminDto.getCni(), adminDto.getStructure() == null);
+                adminDto.getAddresse(), adminDto.getNumPiece());
     }
 
 
     private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone,
-                                           String adresse, String cni, boolean b2) {
+                                           String adresse, String cni) {
         List<String> errors = new ArrayList<>();
 
         if (b) {

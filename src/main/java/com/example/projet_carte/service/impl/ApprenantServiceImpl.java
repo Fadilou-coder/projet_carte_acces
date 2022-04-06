@@ -4,14 +4,11 @@ import com.example.projet_carte.EmailSenderService;
 import com.example.projet_carte.dto.ApprenantDto;
 import com.example.projet_carte.dto.PromoDto;
 import com.example.projet_carte.dto.ReferentielDto;
-import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
-import com.example.projet_carte.model.Referentiel;
-import com.example.projet_carte.model.Structure;
 import com.example.projet_carte.repository.ApprenantRepository;
 import com.example.projet_carte.repository.PromoRepository;
 import com.example.projet_carte.repository.ReferentielRepository;
@@ -20,14 +17,20 @@ import com.example.projet_carte.service.ApprenantService;
 import com.example.projet_carte.validator.PersonneValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.zip.Deflater;
 
 @Slf4j
 @Service
@@ -68,9 +71,9 @@ public class ApprenantServiceImpl implements ApprenantService {
 
         Random random = new Random();
         if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
-            String code = promoRepository.findByLibelle(promo).get().getAnnee() + (random.nextInt(9999 - 1000)+ 1001);
+            String code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000)+ 1001);
             while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
-                code = promoRepository.findByLibelle(promo).get().getAnnee() + (random.nextInt(9999 - 1001) + 1001);
+                code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
             }
             ApprenantDto apprenantDto = new ApprenantDto(
                     null, prenom, nom, email, phone, adresse, cni, code,
@@ -82,6 +85,102 @@ public class ApprenantServiceImpl implements ApprenantService {
             return ApprenantDto.fromEntity(apprenantRepository.save(ApprenantDto.toEntity(apprenantDto)));
         }
         throw new InvalidEntityException("le referentiel ou la promo choisi(e) n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
+    }
+
+    @Override
+    public List<ApprenantDto> saveFromCsv(MultipartFile file) {
+        String TYPE = "text/csv";
+        String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
+        List<ApprenantDto> apps = new ArrayList<>();
+        if (TYPE.equals(file.getContentType())) {
+            try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+                 CSVParser csvParser = new CSVParser(fileReader,
+                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+                Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+                for (CSVRecord csvRecord : csvRecords) {
+                    ApprenantDto apprenantDto = new ApprenantDto(
+                            null,
+                            csvRecord.get("prenom"),
+                            csvRecord.get("nom"),
+                            csvRecord.get("email"),
+                            csvRecord.get("phone"),
+                            csvRecord.get("adresse"),
+                            csvRecord.get("numPiece"),
+                            null,
+                            ReferentielDto.fromEntity(referentielRepository.findByLibelle(csvRecord.get("referentiel")).get()),
+                            PromoDto.fromEntity(promoRepository.findByLibelle(csvRecord.get("promo")).get()),
+                            LocalDate.parse(csvRecord.get("dateNaissance")),
+                            csvRecord.get("lieuNaissance"),
+                            csvRecord.get("numTuteur"),
+                            null,
+                            new ArrayList<>()
+                    );
+                    apps.add(apprenantDto);
+                }
+                return apprenantRepository.saveAll(
+                        apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
+                ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+            } catch (IOException e) {
+                throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+            }
+        }else {
+            try {
+                XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+                XSSFSheet sheet = workbook.getSheetAt(0);
+
+                for(int i=0; i<sheet.getPhysicalNumberOfRows();i++) {
+                    XSSFRow row = sheet.getRow(i);
+                    if (row.getPhysicalNumberOfCells() == 11){
+                        if (i == 0){
+                            for(int j=0;j<row.getPhysicalNumberOfCells();j++) {
+                                if (!Objects.equals(HEADERs[j], row.getCell(j).toString()))
+                                    throw new InvalidEntityException("le format du fichier n'est pas bonne", ErrorCodes.APPRENANT_NOT_VALID);
+                            }
+                        }else {
+                            Random random = new Random();
+                            if (referentielRepository.findByLibelle(row.getCell(6).toString()).isPresent() && promoRepository.findByLibelle(row.getCell(7).toString()).isPresent()) {
+                                String code = promoRepository.findByLibelle(row.getCell(7).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000) + 1001);
+                                while (apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()) {
+                                    code = promoRepository.findByLibelle(row.getCell(7).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
+                                }
+                                ApprenantDto apprenantDto = new ApprenantDto(
+                                        null,
+                                        row.getCell(0).toString(),
+                                        row.getCell(1).toString(),
+                                        row.getCell(2).toString(),
+                                        row.getCell(3).toString(),
+                                        row.getCell(4).toString(),
+                                        row.getCell(5).toString(),
+                                        code,
+                                        referentielRepository.findByLibelle(row.getCell(6).toString()).isPresent() ?
+                                                ReferentielDto.fromEntity(referentielRepository.findByLibelle(row.getCell(6).toString()).get()) : null,
+                                        promoRepository.findByLibelle(row.getCell(7).toString()).isPresent() ?
+                                                PromoDto.fromEntity(promoRepository.findByLibelle(row.getCell(7).toString()).get()) : null,
+                                        row.getCell(8).getLocalDateTimeCellValue().toLocalDate(),
+                                        row.getCell(9).toString(),
+                                        row.getCell(10).toString(),
+                                        null,
+                                        new ArrayList<>()
+                                );
+                                validation(apprenantDto);
+                                apps.add(apprenantDto);
+                            }else
+                                throw new InvalidEntityException("le format du fichier n'est pas bonne : le referentiel ou la promo choisi(e) n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
+                        }
+
+                    }else
+                        throw new InvalidEntityException("le format du fichier n'est pas bonne", ErrorCodes.APPRENANT_NOT_VALID);
+                }
+                return apprenantRepository.saveAll(
+                        apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
+                ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        throw new InvalidEntityException("Please upload a csv file!", ErrorCodes.APPRENANT_NOT_VALID);
     }
 
     @Override
@@ -134,7 +233,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             apprenant.setAdresse(adresse);
         }
         if (!Objects.equals(cni, "")) {
-            apprenant.setCni(cni);
+            apprenant.setNumPiece(cni);
         }
         if (!Objects.equals(dateNaissance, "")) {
             apprenant.setDateNaissance(LocalDate.parse(dateNaissance));
@@ -182,7 +281,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                     Collections.singletonList("Un autre utilisateur avec le meme numero de telephone existe deja dans la BDD"));
         }
 
-        if(userAlreadyExistsCni(apprenantDto.getCni(), apprenantDto.getId())) {
+        if(userAlreadyExistsCni(apprenantDto.getNumPiece(), apprenantDto.getId())) {
             throw new InvalidEntityException("Un autre utilisateur avec le meme cni existe deja", ErrorCodes.APPRENANT_ALREADY_IN_USE,
                     Collections.singletonList("Un autre utilisateur avec le meme cni existe deja dans la BDD"));
         }
@@ -220,9 +319,9 @@ public class ApprenantServiceImpl implements ApprenantService {
     private boolean userAlreadyExistsCni(String cni, Long id) {
         Optional<Personne> user;
         if (id == null) {
-            user = userRepository.findByCni(cni);
+            user = userRepository.findByNumPiece(cni);
         }else {
-            user = userRepository.findByCniAndIdNot(cni, id);
+            user = userRepository.findByNumPieceAndIdNot(cni, id);
         }
         return user.isPresent();
     }

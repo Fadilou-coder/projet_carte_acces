@@ -11,7 +11,7 @@ public class PersonneValidator {
 
     public static List<String> Appvalidate(ApprenantDto userDto) {
         return getStrings(userDto == null, userDto.getPrenom(),
-                userDto.getNom(), userDto.getEmail(), userDto.getPhone(), userDto.getAddresse(), userDto.getCni(),
+                userDto.getNom(), userDto.getEmail(), userDto.getPhone(), userDto.getAddresse(), userDto.getNumPiece(),
                 userDto.getCode(),  userDto.getDateNaissance(), userDto.getLieuNaissance(), userDto.getNumTuteur());
     }
 

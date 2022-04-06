@@ -33,11 +33,11 @@ public class Apprenant extends Personne {
     @ManyToOne
     private Promo promo;
 
-    public Apprenant( String prenom, String nom, String email, String phone,
-                      String adresse, String cni, String code, Referentiel referentiel,
+    public Apprenant( String prenom, String nom, String email, String password, String phone,
+                      String adresse, String typePiece, String cni, String code, Referentiel referentiel,
                       LocalDate dateNaissance, String lieuNaissance,String numTuteur, Promo promo
     ){
-        super(prenom, nom, email, phone, adresse, cni );
+        super(prenom, nom, email, phone, adresse, typePiece, cni, password, "APPRENANT" );
         this.code = code;
         this.referentiel = referentiel;
         this.dateNaissance = dateNaissance;

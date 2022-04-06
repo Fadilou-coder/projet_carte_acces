@@ -18,5 +18,7 @@ public interface ApprenantRepository extends JpaRepository<Apprenant, Long> {
     List<Apprenant> findByPromoIdAndReferentielIdAndArchiveFalse(Long promo_id, Long referentiel_id);
 
     Optional<Apprenant> findByCodeAndIdNot(String code, Long id);
-    Optional<Apprenant> findByCni(String cni);
+    Optional<Apprenant> findByNumPiece(String cni);
+
+    Optional<Apprenant> findByEmailAndArchiveFalse(String email);
 }

@@ -18,4 +18,9 @@ public class VisiteurController implements VisiteurApi {
     public List<VisiteurDto> findAll() {
         return visiteurService.findAll();
     }
+
+    @Override
+    public VisiteurDto putVisiteur(VisiteurDto visiteurDto, Long id) {
+        return visiteurService.putVisiteur(visiteurDto, id);
+    }
 }

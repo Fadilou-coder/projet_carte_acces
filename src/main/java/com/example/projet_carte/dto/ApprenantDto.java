@@ -4,6 +4,7 @@ import com.example.projet_carte.model.Apprenant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.Collection;
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApprenantDto {
 
     private Long id;
@@ -19,7 +21,7 @@ public class ApprenantDto {
     private String email;
     private String phone;
     private String addresse;
-    private String cni;
+    private String numPiece;
     private String code;
     private ReferentielDto referentiel;
     private PromoDto promo;
@@ -40,7 +42,7 @@ public class ApprenantDto {
                 .email(apprenant.getEmail())
                 .phone(apprenant.getPhone())
                 .addresse(apprenant.getAdresse())
-                .cni(apprenant.getCni())
+                .numPiece(apprenant.getNumPiece())
                 .code(apprenant.getCode())
                 .referentiel(ReferentielDto.fromEntity(apprenant.getReferentiel()))
                 .promo(PromoDto.fromEntity(apprenant.getPromo()))
@@ -63,7 +65,7 @@ public class ApprenantDto {
         apprenant.setEmail(apprenantDto.getEmail());
         apprenant.setPhone(apprenantDto.getPhone());
         apprenant.setAdresse(apprenantDto.getAddresse());
-        apprenant.setCni(apprenantDto.getCni());
+        apprenant.setNumPiece(apprenantDto.getNumPiece());
         apprenant.setCode(apprenantDto.getCode());
         apprenant.setReferentiel(ReferentielDto.toEntity(apprenantDto.getReferentiel()));
         apprenant.setPromo(PromoDto.toEntity(apprenantDto.getPromo()));

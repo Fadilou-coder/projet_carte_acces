@@ -8,4 +8,5 @@ public interface PromoService {
 
     List<PromoDto> findAll();
     PromoDto save(PromoDto promoDto);
+    PromoDto putPromo(PromoDto promoDto, Long id);
 }

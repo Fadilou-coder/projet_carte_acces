@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface VisiteurService {
     List<VisiteurDto> findAll();
+    VisiteurDto putVisiteur(VisiteurDto visiteurDto, Long id);
 }

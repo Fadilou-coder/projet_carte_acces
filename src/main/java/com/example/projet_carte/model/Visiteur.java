@@ -19,18 +19,19 @@ public class Visiteur {
     private Long id;
     private String prenom;
     private String nom;
-    @Column(unique=true)
-    private String cni;
+    private String typePiece;
+    private String numPiece;
     @Column(unique=true)
     private String numTelephone;
 
     @OneToMany(mappedBy = "visiteur")
     private Collection<Visites> visites;
 
-    public Visiteur(String prenom, String nom, String cni, String numTelephone) {
+    public Visiteur(String prenom, String nom, String typePiece, String numPiece, String numTelephone) {
         this.prenom = prenom;
         this.nom = nom;
-        this.cni = cni;
+        this.typePiece = typePiece;
+        this.numPiece = numPiece;
         this.numTelephone = numTelephone;
     }
 }

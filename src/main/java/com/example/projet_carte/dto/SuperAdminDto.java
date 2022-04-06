@@ -17,7 +17,7 @@ public class SuperAdminDto {
     protected String email;
     protected String phone;
     protected String addresse;
-    protected String cni;
+    protected String numPiece;
     protected String password;
 
 
@@ -32,7 +32,7 @@ public class SuperAdminDto {
                 .email(superAdmin.getEmail())
                 .phone(superAdmin.getPhone())
                 .addresse(superAdmin.getAdresse())
-                .cni(superAdmin.getCni())
+                .numPiece(superAdmin.getNumPiece())
                 .password(superAdmin.getPassword())
                 .build();
 
@@ -49,7 +49,7 @@ public class SuperAdminDto {
         superAdmin.setEmail(superAdminDto.getEmail());
         superAdmin.setPhone(superAdminDto.getPhone());
         superAdmin.setAdresse(superAdminDto.getAddresse());
-        superAdmin.setCni(superAdminDto.getCni());
+        superAdmin.setNumPiece(superAdminDto.getNumPiece());
         superAdmin.setPassword(superAdminDto.getPassword());
 
         return superAdmin;

@@ -34,6 +34,8 @@ public interface ApprenantService {
 
     ) throws IOException;
 
+    List<ApprenantDto> saveFromCsv(MultipartFile file);
+
     void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException;
 
       ApprenantDto findById(Long id);

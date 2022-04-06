@@ -16,9 +16,9 @@ public class AdminDto {
     protected String email;
     protected String phone;
     protected String addresse;
-    protected String cni;
+    protected String typePiece;
+    protected String numPiece;
     protected String password;
-    private StructureDto structure;
     private boolean isbloqued;
 
     public static AdminDto fromEntity(Admin admin) {
@@ -31,10 +31,10 @@ public class AdminDto {
                 .nom(admin.getNom())
                 .email(admin.getEmail())
                 .phone(admin.getPhone())
+                .typePiece(admin.getTypePiece())
                 .addresse(admin.getAdresse())
-                .cni(admin.getCni())
+                .numPiece(admin.getNumPiece())
                 .password(admin.getPassword())
-                .structure(StructureDto.fromEntity(admin.getStructure()))
                 .isbloqued(admin.isArchive())
                 .build();
 
@@ -51,9 +51,9 @@ public class AdminDto {
         admin.setEmail(adminDto.getEmail());
         admin.setPhone(adminDto.getPhone());
         admin.setAdresse(adminDto.getAddresse());
-        admin.setCni(adminDto.getCni());
+        admin.setTypePiece(adminDto.getTypePiece());
+        admin.setNumPiece(adminDto.getNumPiece());
         admin.setPassword(adminDto.getPassword());
-        admin.setStructure(StructureDto.toEntity(adminDto.getStructure()));
         admin.setArchive(adminDto.isIsbloqued());
 
         return admin;

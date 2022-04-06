@@ -18,7 +18,9 @@ public class VisiteurDto {
 
     private String nom;
 
-    private String cni;
+    private String typePiece;
+
+    private String numPiece;
 
     private String numTelephone;
 
@@ -31,7 +33,8 @@ public class VisiteurDto {
                 .id(visiteur.getId())
                 .prenom(visiteur.getPrenom())
                 .nom(visiteur.getNom())
-                .cni(visiteur.getCni())
+                .typePiece(visiteur.getTypePiece())
+                .numPiece(visiteur.getNumPiece())
                 .numTelephone(visiteur.getNumTelephone())
                 .build();
 
@@ -45,7 +48,8 @@ public class VisiteurDto {
         visiteur.setId(visiteurDto.getId());
         visiteur.setPrenom(visiteurDto.getPrenom());
         visiteur.setNom(visiteurDto.getNom());
-        visiteur.setCni(visiteurDto.getCni());
+        visiteur.setTypePiece(visiteurDto.getTypePiece());
+        visiteur.setNumPiece(visiteurDto.getNumPiece());
         visiteur.setNumTelephone(visiteurDto.getNumTelephone());
         if (visiteurDto.getVisites() != null)
             visiteur.setVisites(visiteurDto.getVisites().stream().map(VisiteDto::toEntity).collect(Collectors.toList()));

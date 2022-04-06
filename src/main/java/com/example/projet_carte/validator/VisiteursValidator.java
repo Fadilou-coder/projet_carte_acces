@@ -1,6 +1,5 @@
 package com.example.projet_carte.validator;
 
-import com.example.projet_carte.dto.StructureDto;
 import com.example.projet_carte.dto.VisiteurDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ import java.util.List;
 public class VisiteursValidator {
     public static List<String> validate(VisiteurDto visiteur)
     {
-        return getString(visiteur == null, visiteur.getCni(), visiteur.getPrenom(), visiteur.getNom(), visiteur.getNumTelephone());
+        return getString(visiteur == null, visiteur.getNumPiece(), visiteur.getPrenom(), visiteur.getNom(), visiteur.getNumTelephone());
     }
 
     public static List<String> getString(boolean isStructure, String cni, String prenom, String nom, String num)
