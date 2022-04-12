@@ -8,7 +8,7 @@
 		<!--  lookup parent from repository  -->
 	</parent>
 	<groupId>com.odc</groupId>
-	<artifactId>suiviapprenants</artifactId>
+	<artifactId>projet_carte_access</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>projet_carte_access</name>
 	<description>Systeme de pointage des apprenants</description>
@@ -104,19 +104,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-csv</artifactId>
-			<version>1.9.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>4.1.2</version>
-		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>
@@ -132,14 +119,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-        </plugins>
+		</plugins>
 	</build>
 </project>
