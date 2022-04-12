@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class Commentaire {
     @Id
     @GeneratedValue
@@ -17,7 +16,7 @@ public class Commentaire {
 
     private String commentaire;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Apprenant apprenant;
 
 }
