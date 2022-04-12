@@ -2,6 +2,7 @@ package com.example.projet_carte.controller;
 
 import com.example.projet_carte.controller.api.ApprenantApi;
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.CommentaireDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.service.ApprenantService;
 import lombok.AllArgsConstructor;
@@ -58,6 +59,16 @@ public class ApprenantController implements ApprenantApi {
     @Override
     public void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException {
         apprenantService.sendCarte(prenom, nom, email, file);
+    }
+
+    @Override
+    public CommentaireDto addComment(CommentaireDto commentaire) {
+        return apprenantService.addComment(commentaire);
+    }
+
+    @Override
+    public List<CommentaireDto> findcommentsByApp(Long id) {
+        return apprenantService.commentsApp(id);
     }
 
     @Override

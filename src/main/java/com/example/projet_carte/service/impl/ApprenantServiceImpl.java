@@ -2,6 +2,7 @@ package com.example.projet_carte.service.impl;
 
 import com.example.projet_carte.EmailSenderService;
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.CommentaireDto;
 import com.example.projet_carte.dto.PromoDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
@@ -9,10 +10,7 @@ import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
-import com.example.projet_carte.repository.ApprenantRepository;
-import com.example.projet_carte.repository.PromoRepository;
-import com.example.projet_carte.repository.ReferentielRepository;
-import com.example.projet_carte.repository.UserRepository;
+import com.example.projet_carte.repository.*;
 import com.example.projet_carte.service.ApprenantService;
 import com.example.projet_carte.validator.PersonneValidator;
 import lombok.AllArgsConstructor;
@@ -40,6 +38,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     UserRepository userRepository;
     ReferentielRepository referentielRepository;
     PromoRepository promoRepository;
+    CommentaireRepository commentaireRepository;
     EmailSenderService emailSenderService;
 
     @Override
@@ -269,6 +268,23 @@ public class ApprenantServiceImpl implements ApprenantService {
                         ErrorCodes.APPRENANT_NOT_FOUND));
         apprenant.setArchive(true);
         apprenantRepository.flush();
+    }
+
+    @Override
+    public CommentaireDto addComment(CommentaireDto commentaire) {
+        if (commentaire.getCommentaire().isBlank()){
+            throw new InvalidEntityException("Veuillez Saisir quelsue chose", ErrorCodes.APPRENANT_NOT_FOUND,
+                    Collections.singletonList("Veuillez Saisir quelque chose"));
+        }else if (apprenantRepository.findById(commentaire.getApprenant().getId()).isEmpty()){
+            throw new InvalidEntityException("l'apprenant choisi n'existe pas dans la base de BDD", ErrorCodes.APPRENANT_NOT_FOUND,
+                    Collections.singletonList("l'apprenant choisi n'existe pas dans la base de BDD"));
+        }
+        return CommentaireDto.fromEntity(commentaireRepository.save(CommentaireDto.toEntity(commentaire)));
+    }
+
+    @Override
+    public List<CommentaireDto> commentsApp(Long id) {
+        return commentaireRepository.findByApprenantId(id).stream().map(CommentaireDto::fromEntity).collect(Collectors.toList());
     }
 
     private void validation(ApprenantDto apprenantDto) {

@@ -1,6 +1,7 @@
 package com.example.projet_carte.controller.api;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.CommentaireDto;
 import com.example.projet_carte.dto.ReferentielDto;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,12 @@ public interface ApprenantApi {
             @RequestParam("email") String email ,
             @RequestParam("file") MultipartFile file
     ) throws IOException;
+
+    @PostMapping("/apprenants/comments")
+    CommentaireDto addComment(@RequestBody CommentaireDto commentaire);
+
+    @GetMapping("/apprenants/{id}/comments")
+    List<CommentaireDto> findcommentsByApp(@PathVariable Long id);
 
     @PutMapping("/apprenants/{id}")
     ApprenantDto put(@PathVariable Long id,

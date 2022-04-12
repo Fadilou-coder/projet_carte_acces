@@ -1,7 +1,10 @@
 package com.example.projet_carte.service;
 
 import com.example.projet_carte.dto.ApprenantDto;
+import com.example.projet_carte.dto.CommentaireDto;
 import com.example.projet_carte.dto.ReferentielDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -54,4 +57,8 @@ public interface ApprenantService {
                      MultipartFile avatar) throws IOException;
 
     void delete(Long id);
+
+    CommentaireDto addComment(CommentaireDto commentaire);
+
+    List<CommentaireDto> commentsApp(Long id);
 }

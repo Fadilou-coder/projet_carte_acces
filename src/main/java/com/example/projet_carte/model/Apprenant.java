@@ -33,6 +33,9 @@ public class Apprenant extends Personne {
     @ManyToOne
     private Promo promo;
 
+    @OneToMany(mappedBy = "apprenant")
+    private Collection<Commentaire> commentaires;
+
     public Apprenant( String prenom, String nom, String email, String password, String phone,
                       String adresse, String typePiece, String numPiece, String sexe, String code, Referentiel referentiel,
                       LocalDate dateNaissance, String lieuNaissance,String numTuteur, Promo promo
