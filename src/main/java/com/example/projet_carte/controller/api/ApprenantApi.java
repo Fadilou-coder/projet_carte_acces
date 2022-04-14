@@ -91,10 +91,10 @@ public interface ApprenantApi {
     @GetMapping("/apprenants/{id}/nbrRetard/{dateDebut}/{dateFin}")
     Integer findNbrRetard(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
-    @GetMapping("/apprenants/{id}/nbrAbsAllApp/{dateDebut}/{dateFin}")
+    @GetMapping("/promos/{id}/nbrAbsAllApp/{dateDebut}/{dateFin}")
     Integer findNbrAbscencesAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
-    @GetMapping("/apprenants/{id}/nbrRetardAllApp/{dateDebut}/{dateFin}")
+    @GetMapping("/promos/{id}/nbrRetardAllApp/{dateDebut}/{dateFin}")
     Integer findNbrRetardAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
     @RequestMapping(value = "/apprenants/{id}", method = DELETE)

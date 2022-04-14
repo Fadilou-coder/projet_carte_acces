@@ -23,6 +23,8 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +48,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     CommentaireRepository commentaireRepository;
     VisiteRepository visiteRepository;
     EmailSenderService emailSenderService;
+
 
     @Override
     public List<ApprenantDto> findAll() {
@@ -75,13 +78,14 @@ public class ApprenantServiceImpl implements ApprenantService {
     public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         Random random = new Random();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
             String code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000)+ 1001);
             while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
                 code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
             }
             ApprenantDto apprenantDto = new ApprenantDto(
-                    null, prenom, nom, email, phone, adresse, typePiece, numPiece, code,
+                    null, prenom, nom, email, encoder.encode("password"), phone, adresse, typePiece, numPiece, code,
                     ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
                     LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, avatar.getBytes(), null
             );
@@ -97,6 +101,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         String TYPE = "text/csv";
         String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "TypePiece", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
         List<ApprenantDto> apps = new ArrayList<>();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (TYPE.equals(file.getContentType())) {
             try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
                  CSVParser csvParser = new CSVParser(fileReader,
@@ -108,6 +113,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                             csvRecord.get("prenom"),
                             csvRecord.get("nom"),
                             csvRecord.get("email"),
+                            encoder.encode("password"),
                             csvRecord.get("phone"),
                             csvRecord.get("adresse"),
                             csvRecord.get("typePiece"),
@@ -154,6 +160,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                                         row.getCell(0).toString(),
                                         row.getCell(1).toString(),
                                         row.getCell(2).toString(),
+                                        encoder.encode("password"),
                                         row.getCell(3).toString(),
                                         row.getCell(4).toString(),
                                         row.getCell(5).toString(),
@@ -269,6 +276,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
     @Override
     public ApprenantDto putFieldApp(Long id, ApprenantDto apprenantDto){
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (id == null) {
             return null;
         }
@@ -308,6 +316,10 @@ public class ApprenantServiceImpl implements ApprenantService {
         }
         if (!Objects.equals(apprenantDto.getNumTuteur(), "") && apprenantDto.getNumTuteur() != null) {
             apprenant.setNumTuteur(apprenantDto.getNumTuteur());
+        }
+
+        if (!Objects.equals(apprenantDto.getPassword(), "") && apprenantDto.getPassword() != null) {
+            apprenant.setPassword(encoder.encode(apprenantDto.getPassword()));
         }
 
         validation(ApprenantDto.fromEntity(apprenant));

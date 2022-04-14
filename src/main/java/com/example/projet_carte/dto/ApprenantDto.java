@@ -19,6 +19,7 @@ public class ApprenantDto {
     private String prenom;
     private String nom;
     private String email;
+    private String password;
     private String phone;
     private String addresse;
     private String typePiece;
@@ -41,6 +42,7 @@ public class ApprenantDto {
                 .prenom(apprenant.getPrenom())
                 .nom(apprenant.getNom())
                 .email(apprenant.getEmail())
+                .password(apprenant.getPassword())
                 .phone(apprenant.getPhone())
                 .addresse(apprenant.getAdresse())
                 .typePiece(apprenant.getTypePiece())
@@ -65,6 +67,7 @@ public class ApprenantDto {
         apprenant.setPrenom(apprenantDto.getPrenom());
         apprenant.setNom(apprenantDto.getNom());
         apprenant.setEmail(apprenantDto.getEmail());
+        apprenant.setPassword(apprenantDto.getPassword());
         apprenant.setPhone(apprenantDto.getPhone());
         apprenant.setAdresse(apprenantDto.getAddresse());
         apprenant.setTypePiece(apprenantDto.getTypePiece());
