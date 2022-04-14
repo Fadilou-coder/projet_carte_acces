@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
@@ -78,6 +79,23 @@ public interface ApprenantApi {
                      @RequestParam("avatar") MultipartFile avatar
     ) throws IOException;
 
+    @PutMapping("/apprenants/field/{id}")
+    ApprenantDto putFieldApp(@PathVariable Long id, @RequestBody ApprenantDto apprenantDto);
+
+    @PutMapping("/apprenants/image/{id}")
+    ApprenantDto putImageApp(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException;
+
+    @GetMapping("/apprenants/{id}/nbrAbs/{dateDebut}/{dateFin}")
+    Integer findNbrAbscences(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
+
+    @GetMapping("/apprenants/{id}/nbrRetard/{dateDebut}/{dateFin}")
+    Integer findNbrRetard(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
+
+    @GetMapping("/apprenants/{id}/nbrAbsAllApp/{dateDebut}/{dateFin}")
+    Integer findNbrAbscencesAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
+
+    @GetMapping("/apprenants/{id}/nbrRetardAllApp/{dateDebut}/{dateFin}")
+    Integer findNbrRetardAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
     @RequestMapping(value = "/apprenants/{id}", method = DELETE)
     @ResponseBody

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -76,6 +77,36 @@ public class ApprenantController implements ApprenantApi {
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         return apprenantService.put(id, prenom, nom, email, phone, adresse, typePiece, numPiece,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
+    }
+
+    @Override
+    public ApprenantDto putFieldApp(Long id, ApprenantDto apprenantDto) {
+        return apprenantService.putFieldApp(id, apprenantDto);
+    }
+
+    @Override
+    public ApprenantDto putImageApp(Long id, MultipartFile file) throws IOException {
+        return apprenantService.putImageApp(id, file);
+    }
+
+    @Override
+    public Integer findNbrAbscences(Long id, String dateDebut, String dateFin) {
+        return apprenantService.findNbrAbscences(id, LocalDate.parse(dateDebut), LocalDate.parse(dateFin));
+    }
+
+    @Override
+    public Integer findNbrRetard(Long id, String dateDebut, String dateFin) {
+        return apprenantService.findNbrRetard(id, LocalDate.parse(dateDebut), LocalDate.parse(dateFin));
+    }
+
+    @Override
+    public Integer findNbrAbscencesAllApp(Long id, String dateDebut, String dateFin) {
+        return apprenantService.findNbrAbscencesAllApp(id, LocalDate.parse(dateDebut), LocalDate.parse(dateFin));
+    }
+
+    @Override
+    public Integer findNbrRetardAllApp(Long id, String dateDebut, String dateFin) {
+        return apprenantService.findNbrRetardAllApp(id, LocalDate.parse(dateDebut), LocalDate.parse(dateFin));
     }
 
     @Override

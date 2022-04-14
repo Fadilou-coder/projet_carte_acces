@@ -10,6 +10,8 @@ import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
+import com.example.projet_carte.model.Promo;
+import com.example.projet_carte.model.Visites;
 import com.example.projet_carte.repository.*;
 import com.example.projet_carte.service.ApprenantService;
 import com.example.projet_carte.validator.PersonneValidator;
@@ -26,8 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,6 +44,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     ReferentielRepository referentielRepository;
     PromoRepository promoRepository;
     CommentaireRepository commentaireRepository;
+    VisiteRepository visiteRepository;
     EmailSenderService emailSenderService;
 
     @Override
@@ -259,6 +265,169 @@ public class ApprenantServiceImpl implements ApprenantService {
 
         apprenantRepository.flush();
         return apprenantDto;
+    }
+
+    @Override
+    public ApprenantDto putFieldApp(Long id, ApprenantDto apprenantDto){
+        if (id == null) {
+            return null;
+        }
+        Apprenant apprenant = apprenantRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND));
+        if (!Objects.equals(apprenantDto.getPrenom(), "") && apprenantDto.getPrenom() != null) {
+            apprenant.setPrenom(apprenantDto.getPrenom());
+        }
+
+        if (!Objects.equals(apprenantDto.getNom(), "") && apprenantDto.getNom() != null) {
+            apprenant.setNom(apprenantDto.getNom());
+        }
+        if (!Objects.equals(apprenantDto.getEmail(), "") && apprenantDto.getEmail() != null) {
+            apprenant.setEmail(apprenantDto.getEmail());
+        }
+        if (!Objects.equals(apprenantDto.getPhone(), "") && apprenantDto.getPhone() != null) {
+            apprenant.setPhone(apprenantDto.getPhone());
+        }
+        if (!Objects.equals(apprenantDto.getAddresse(), "") && apprenantDto.getAddresse() != null) {
+            apprenant.setAdresse(apprenantDto.getAddresse());
+        }
+        if (!Objects.equals(apprenantDto.getNumPiece(), "") && apprenantDto.getNumPiece() != null) {
+            apprenant.setNumPiece(apprenantDto.getNumPiece());
+        }
+
+        if (!Objects.equals(apprenantDto.getTypePiece(), "") && apprenantDto.getTypePiece() != null) {
+            apprenant.setTypePiece(apprenantDto.getTypePiece());
+        }
+
+        if (apprenantDto.getDateNaissance() != null) {
+            apprenant.setDateNaissance(apprenantDto.getDateNaissance());
+        }
+        if (!Objects.equals(apprenantDto.getLieuNaissance(), "") && apprenantDto.getLieuNaissance() != null) {
+            apprenant.setLieuNaissance(apprenantDto.getLieuNaissance());
+        }
+        if (!Objects.equals(apprenantDto.getNumTuteur(), "") && apprenantDto.getNumTuteur() != null) {
+            apprenant.setNumTuteur(apprenantDto.getNumTuteur());
+        }
+
+        validation(ApprenantDto.fromEntity(apprenant));
+        apprenantRepository.flush();
+        return ApprenantDto.fromEntity(apprenant);
+    }
+
+    @Override
+    public ApprenantDto putImageApp(Long id, MultipartFile file) throws IOException {
+
+        if (id == null) {
+            return null;
+        }
+        Apprenant apprenant = apprenantRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND));
+
+        if (!file.isEmpty()) {
+            apprenant.setAvatar(file.getBytes());
+        }
+
+        ApprenantDto apprenantDto = ApprenantDto.fromEntity(apprenant);
+        validation(apprenantDto);
+
+        apprenantRepository.flush();
+        return apprenantDto;
+    }
+
+    @Override
+    public Integer findNbrAbscences(Long id, LocalDate dateDebut, LocalDate dateFin) {
+        Integer nbr = 0;
+        if (id == null) {
+            return null;
+        }
+        Apprenant apprenant = apprenantRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND));
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
+        for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+            if (!visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
+                    i.plusDays(1).atStartOfDay(), apprenant, null).isPresent())
+                nbr++;
+            else{
+                Visites visites = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
+                        i.plusDays(1).atStartOfDay(), apprenant, null).get();
+                if (Duration.between(LocalDateTime.of(i.atStartOfDay().getYear(), i.atStartOfDay().getMonthValue(),
+                        i.atStartOfDay().getDayOfMonth(),
+                        8, 15, 0), visites.getDateEntree()).toMinutes() > 15)
+                    nbr++;
+            }
+        }
+        return nbr;
+    }
+
+    @Override
+    public Integer findNbrRetard(Long id, LocalDate dateDebut, LocalDate dateFin) {
+        int nbr = 0;
+        if (id == null) {
+            return null;
+        }
+        Apprenant apprenant = apprenantRepository.findByIdAndArchiveFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.APPRENANT_NOT_FOUND));
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+            if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
+                    i.plusDays(1).atStartOfDay(), apprenant, null).isPresent()) {
+                Visites visites = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
+                        i.plusDays(1).atStartOfDay(), apprenant, null).get();
+                if (Duration.between(LocalDateTime.of(i.atStartOfDay().getYear(), i.atStartOfDay().getMonthValue(),
+                        i.atStartOfDay().getDayOfMonth(),
+                        8, 15, 0), visites.getDateEntree()).toMinutes() <= 15)
+                    nbr = nbr + (int) Duration.between(LocalDateTime.of(i.atStartOfDay().getYear(),
+                                    i.atStartOfDay().getMonthValue(),
+                                    i.atStartOfDay().getDayOfMonth(),
+                                    8, 15, 0), visites.getDateEntree()).toMinutes();
+            }
+        }
+        return nbr;
+    }
+
+    @Override
+    public Integer findNbrAbscencesAllApp(Long id, LocalDate dateDebut, LocalDate dateFin) {
+        if (id == null) {
+            return null;
+        }
+        Promo promo = promoRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.PROMO_NOT_FOUND));
+        AtomicReference<Integer> nbr = new AtomicReference<>(0);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        LocalDate finalDateFin = dateFin;
+        promo.getApprenants().forEach(apprenant -> {
+            nbr.getAndSet(nbr.get() + findNbrAbscences(apprenant.getId(), dateDebut, finalDateFin));
+        });
+
+        return nbr.get();
+    }
+
+    @Override
+    public Integer findNbrRetardAllApp(Long id, LocalDate dateDebut, LocalDate dateFin) {
+        if (id == null) {
+            return null;
+        }
+        Promo promo = promoRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
+                        ErrorCodes.PROMO_NOT_FOUND));
+        AtomicReference<Integer> nbr = new AtomicReference<>(0);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        LocalDate finalDateFin = dateFin;
+        promo.getApprenants().forEach(apprenant -> {
+            nbr.getAndSet(nbr.get() + findNbrRetard(apprenant.getId(), dateDebut, finalDateFin));
+        });
+
+        return nbr.get();
     }
 
     @Override
