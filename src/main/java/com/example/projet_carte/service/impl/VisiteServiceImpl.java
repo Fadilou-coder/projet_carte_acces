@@ -34,9 +34,9 @@ public class VisiteServiceImpl implements VisiteService {
 
     @Override
     public VisiteDto saveVisiteVisiteur(VisiteDto visiteDto) {
-        if (visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).isPresent()) {
+        if (visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).isPresent()) {
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
-                    LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).get()).isPresent())
+                    LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).get()).isPresent())
                 return null;
         }
         visiteDto.setDateEntree(LocalDateTime.now());
@@ -121,10 +121,10 @@ public class VisiteServiceImpl implements VisiteService {
     @Override
     public VisiteDto SortieVisiteur(VisiteDto visiteDto) {
         Visites visite;
-        if (visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).isPresent() && visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
-                    LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).get()).isPresent()) {
+        if (visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).isPresent() && visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
+                    LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).get()).isPresent()) {
                 visite = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(LocalDate.now().atStartOfDay(),
-                        LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).get()).get();
+                        LocalDate.now().plusDays(1).atStartOfDay(), null, visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).get()).get();
                 visite.setDateSortie(LocalDateTime.now());
                 visiteRepository.flush();
                 return VisiteDto.fromEntity(visite);
@@ -136,13 +136,14 @@ public class VisiteServiceImpl implements VisiteService {
 
     private VisiteDto getVisiteVisiteur(VisiteDto visiteDto) {
         validation(visiteDto.getVisiteur());
-        if (visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).isPresent())
-            visiteDto.setVisiteur(VisiteurDto.fromEntity(visiteurRepository.findByCni(visiteDto.getVisiteur().getCni()).get()));
+        if (visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).isPresent())
+            visiteDto.setVisiteur(VisiteurDto.fromEntity(visiteurRepository.findByNumPiece(visiteDto.getVisiteur().getNumPiece()).get()));
         else
             visiteDto.setVisiteur(VisiteurDto.fromEntity(visiteurRepository.save(
                     new Visiteur(visiteDto.getVisiteur().getPrenom(),
                             visiteDto.getVisiteur().getNom(),
-                            visiteDto.getVisiteur().getCni(),
+                            visiteDto.getVisiteur().getTypePiece(),
+                            visiteDto.getVisiteur().getNumPiece(),
                             visiteDto.getVisiteur().getNumTelephone())
             )));
         return VisiteDto.fromEntity(visiteRepository.save(VisiteDto.toEntity(visiteDto)));

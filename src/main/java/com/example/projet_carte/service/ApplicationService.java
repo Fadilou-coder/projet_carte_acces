@@ -8,4 +8,8 @@ public interface ApplicationService {
     Admin findUserByEmailAdmin(String username);
 
     SuperAdmin findUserByEmailSuperAdmin(String username);
+
+    Superviseur findUserByEmailSuperviseur(String username);
+
+    Apprenant findUserByEmailApprenant(String username);
 }

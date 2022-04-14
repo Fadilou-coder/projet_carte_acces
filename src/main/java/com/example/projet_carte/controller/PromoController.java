@@ -23,4 +23,9 @@ public class PromoController implements PromoApi {
     public PromoDto save(PromoDto promoDto) {
         return service.save(promoDto);
     }
+
+    @Override
+    public PromoDto putPromo(PromoDto promoDto, Long id) {
+        return service.putPromo(promoDto, id);
+    }
 }

@@ -5,9 +5,9 @@ import com.example.projet_carte.controller.api.AuthenticationApi;
 import com.example.projet_carte.dto.auth.AuthenticationRequest;
 import com.example.projet_carte.dto.auth.AuthenticationResponse;
 import com.example.projet_carte.repository.AdminRepository;
+import com.example.projet_carte.repository.ApprenantRepository;
 import com.example.projet_carte.repository.SuperAdminRepository;
-import com.example.projet_carte.service.ApplicationService;
-import com.example.projet_carte.service.impl.UserDetailsServiceImpl;
+import com.example.projet_carte.repository.SuperviseurRepository;
 import com.example.projet_carte.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,11 +26,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AuthenticationController implements AuthenticationApi {
   private AuthenticationManager authenticationManager;
-  private UserDetailsServiceImpl userDetailsService;
-  private ApplicationService applicationService;
+  private UserDetailsService userDetailsService;
   private JwtUtil jwtUtil;
   AdminRepository adminRepository;
   SuperAdminRepository superAdminRepository;
+  ApprenantRepository apprenantRepository;
+  SuperviseurRepository superviseurRepository;
 
   @Override
   public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
@@ -48,8 +50,14 @@ public class AuthenticationController implements AuthenticationApi {
     Long id;
     if (adminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).isPresent())
       id = adminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
-    else
+    else if (superAdminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).isPresent())
       id = superAdminRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
+    else if (superviseurRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).isPresent())
+      id = superviseurRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
+    else if (apprenantRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).isPresent())
+      id = apprenantRepository.findByEmailAndArchiveFalse(userDetails.getUsername()).get().getId();
+    else
+      id = null;
 
     return ResponseEntity.ok(
             new AuthenticationResponse(jwt,roles, id)

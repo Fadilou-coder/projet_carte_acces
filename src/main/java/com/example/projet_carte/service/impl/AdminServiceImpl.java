@@ -7,8 +7,8 @@ import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Admin;
 import com.example.projet_carte.repository.AdminRepository;
-import com.example.projet_carte.repository.StructureRepository;
 import com.example.projet_carte.repository.SuperAdminRepository;
+import com.example.projet_carte.repository.SuperviseurRepository;
 import com.example.projet_carte.service.AdminService;
 import com.example.projet_carte.validator.AdminValidator;
 import lombok.AllArgsConstructor;
@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     AdminRepository adminRepository;
-    StructureRepository structureRepository;
     SuperAdminRepository superAdminRepository;
+    SuperviseurRepository superviseurRepository;
     private EmailSenderService emailSenderService;
 
 
@@ -79,10 +79,8 @@ public class AdminServiceImpl implements AdminService {
         admin.setEmail(adminDto.getEmail());
         admin.setPhone(adminDto.getPhone());
         admin.setAdresse(adminDto.getAddresse());
-        admin.setCni(adminDto.getCni());
+        admin.setNumPiece(adminDto.getNumPiece());
         admin.setArchive(adminDto.isIsbloqued());
-        if (structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).isPresent())
-            admin.setStructure(structureRepository.findByNomStructureAndArchiveFalse(adminDto.getStructure().getNomStructure()).get());
 
         AdminDto adminDto1 = AdminDto.fromEntity(admin);
         validation(adminDto1, id);
@@ -122,11 +120,7 @@ public class AdminServiceImpl implements AdminService {
     private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
-        ArealyExist(id, errors, superAdminRepository, adminDto.getEmail(), adminRepository, adminDto.getCni(), adminDto.getEmail(), adminDto.getPhone());
-
-        if (!structureRepository.findByIdAndArchiveFalse(adminDto.getStructure().getId()).isPresent()){
-            errors.add("la structure selectionnée n'existe pas dans la base de données");
-        }
+        ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, adminDto.getEmail(), adminDto.getPhone());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
@@ -134,19 +128,15 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, String username, AdminRepository adminRepository, String cni, String email, String phone) {
+    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, SuperviseurRepository superviseurRepository, AdminRepository adminRepository, String email, String phone) {
 
-        if (superAdminRepository.findByCniAndIdNot(cni, id).isPresent() || adminRepository.findByCniAndIdNot(cni, id).isPresent()){
-            errors.add("un utilisateur avec ce cni existe deja dans la base de données");
-        }
+            if (superAdminRepository.findByEmailAndIdNot(email, id).isPresent() || adminRepository.findByEmailAndIdNot(email, id).isPresent() || superviseurRepository.findByEmailAndIdNot(email, id).isPresent() ) {
+                errors.add("un utilisateur avec ce email existe deja dans la base de données");
+            }
 
-        if (superAdminRepository.findByEmailAndIdNot(email, id).isPresent() || adminRepository.findByEmailAndIdNot(email, id).isPresent()){
-            errors.add("un utilisateur avec ce email existe deja dans la base de données");
-        }
-
-        if (superAdminRepository.findByPhoneAndIdNot(phone, id).isPresent() || adminRepository.findByPhoneAndIdNot(phone, id).isPresent()){
-            errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
-        }
+            if (superAdminRepository.findByPhoneAndIdNot(phone, id).isPresent() || adminRepository.findByPhoneAndIdNot(phone, id).isPresent() || superviseurRepository.findByPhoneAndIdNot(phone, id).isPresent()) {
+                errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
+            }
     }
 
 }

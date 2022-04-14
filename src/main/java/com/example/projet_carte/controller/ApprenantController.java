@@ -50,6 +50,11 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public List<ApprenantDto> saveFromCsv(MultipartFile file) {
+        return apprenantService.saveFromCsv(file);
+    }
+
+    @Override
     public void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException {
         apprenantService.sendCarte(prenom, nom, email, file);
     }

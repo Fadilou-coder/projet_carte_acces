@@ -4,17 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Entity
 @NoArgsConstructor
 @Data
 public class Promo {
-
-    public Promo(String libelle, String annee) {
-        this.libelle = libelle;
-        this.annee = annee;
-    }
 
     @Id
     @GeneratedValue
@@ -23,10 +19,18 @@ public class Promo {
     @Column(unique=true)
     private String libelle;
 
-    private String annee;
+    private LocalDate dateDebut;
+
+    private LocalDate dateFin;
 
     @OneToMany(mappedBy = "promo")
     private Collection<Apprenant> apprenants;
 
     private boolean archive = false;
+
+    public Promo(String libelle, LocalDate dateDebut, LocalDate dateFin) {
+        this.libelle = libelle;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+    }
 }

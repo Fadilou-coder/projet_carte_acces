@@ -10,12 +10,12 @@ public class AdminValidator {
 
     public static List<String> validateAd(AdminDto adminDto) {
         return getStrings(adminDto == null, adminDto.getPrenom(), adminDto.getNom(),adminDto.getEmail(),adminDto.getPhone(),
-                adminDto.getAddresse(), adminDto.getCni(), adminDto.getStructure() == null);
+                adminDto.getAddresse(), adminDto.getNumPiece());
     }
 
 
     private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone,
-                                           String adresse, String cni, boolean b2) {
+                                           String adresse, String cni) {
         List<String> errors = new ArrayList<>();
 
         if (b) {

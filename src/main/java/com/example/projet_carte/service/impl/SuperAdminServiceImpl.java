@@ -32,11 +32,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     @Override
-    public SuperAdminDto findByCni(String cni) {
-        if (cni == null) return null;
-        return superAdminRepository.findByCni(cni).map(SuperAdminDto::fromEntity).orElseThrow(() ->
+    public SuperAdminDto findByCni(String numPiece) {
+        if (numPiece == null) return null;
+        return superAdminRepository.findByNumPiece(numPiece).map(SuperAdminDto::fromEntity).orElseThrow(() ->
                 new EntityNotFoundException(
-                        "Aucun utilisateur avec le cni = " + cni + " ne se trouve dans la BDD",
+                        "Aucun utilisateur avec le numPiece = " + numPiece + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND)
         );
     }
@@ -62,7 +62,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         superAdmin.setAdresse(superAdminDto.getAddresse());
         superAdmin.setPrenom(superAdminDto.getPrenom());
         superAdmin.setNom(superAdmin.getNom());
-        superAdmin.setCni(superAdminDto.getCni());
+        superAdmin.setNumPiece(superAdminDto.getNumPiece());
         superAdmin.setPhone(superAdminDto.getPhone());
         superAdmin.setPassword(encoder.encode(superAdminDto.getPassword()));
 
@@ -96,9 +96,9 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     private void validation(SuperAdminDto superAdminDto, Long id) {
-        List<String> errors = SuperAdminValidator.validate(superAdminDto);
+        List<String> errors = SuperAdminValidator.validate(null, superAdminDto, "superAdmin");
 
-        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superAdminDto.getEmail(), adminRepository, superAdminDto.getCni(), superAdminDto.getEmail(), superAdminDto.getPhone());
+        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, null, adminRepository, superAdminDto.getEmail(), superAdminDto.getPhone());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.ADMIN_NOT_VALID, errors);

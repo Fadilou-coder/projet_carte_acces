@@ -44,6 +44,9 @@ public interface ApprenantApi {
             @RequestParam("avatar") MultipartFile avatar
     ) throws IOException;
 
+    @PostMapping("/apprenants/saveAsCsv")
+    List<ApprenantDto> saveFromCsv(@RequestParam("file") MultipartFile file);
+
     @PostMapping("/apprenants/sendMail")
     void sendCarte(
             @RequestParam("prenom") String prenom ,

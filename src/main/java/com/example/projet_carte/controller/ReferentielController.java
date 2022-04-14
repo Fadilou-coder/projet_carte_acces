@@ -17,4 +17,14 @@ public class ReferentielController implements ReferentielApi {
     public List<ReferentielDto> findAll() {
         return referentielService.findAll();
     }
+
+    @Override
+    public ReferentielDto save(ReferentielDto referentielDto) {
+        return null;
+    }
+
+    @Override
+    public ReferentielDto putPromo(ReferentielDto referentielDto, Long id) {
+        return null;
+    }
 }

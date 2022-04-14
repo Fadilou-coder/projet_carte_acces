@@ -16,8 +16,6 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     Optional<Admin> findByEmailAndIdNot(String email, Long id);
     Optional<Admin> findByPhoneAndIdNot(String num, Long id);
-    Optional<Admin> findByCniAndIdNot(String cni, Long id);
-    Optional<Admin> findByCni(String cni);
-
-    List<Admin> findAllByStructureId(Long structure_id);
+    Optional<Admin> findByNumPieceAndIdNot(String cni, Long id);
+    Optional<Admin> findByNumPiece(String cni);
 }
