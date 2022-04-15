@@ -15,7 +15,7 @@ public interface DeviceApi {
     @GetMapping("/devices")
     List<DeviceDto> findAllDevices();
 
-    @GetMapping("/devices/{mac}")
+    @GetMapping("/devices/adress/{mac}")
     DeviceDto findDevice(@PathVariable("mac") String mac);
 
 

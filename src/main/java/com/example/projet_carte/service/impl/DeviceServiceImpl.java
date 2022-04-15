@@ -31,10 +31,10 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public DeviceDto findDevice(String mac) {
-        if (repository.findByMacAdress(mac).isPresent()){
-            return DeviceDto.fromEntity(repository.findByMacAdress(mac).get());
-        }
-        return null;
+        DeviceAutoriser device = repository.findByMacAdress(mac).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "Aucun Appareil avec l'ID = " + mac + " ne se trouve dans la BDD", ErrorCodes.DEVICE_NOT_FOUND));
+        return DeviceDto.fromEntity(device);
     }
 
     @Override
