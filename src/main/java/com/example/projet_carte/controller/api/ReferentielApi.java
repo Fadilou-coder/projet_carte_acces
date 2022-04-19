@@ -16,5 +16,5 @@ public interface ReferentielApi {
     ReferentielDto save(@RequestBody ReferentielDto referentielDto);
 
     @PutMapping("/referentiel/{id}")
-    ReferentielDto putPromo(@RequestBody ReferentielDto referentielDto, @PathVariable Long id);
+    ReferentielDto putRef(@RequestBody ReferentielDto referentielDto, @PathVariable Long id);
 }

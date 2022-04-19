@@ -20,11 +20,11 @@ public class ReferentielController implements ReferentielApi {
 
     @Override
     public ReferentielDto save(ReferentielDto referentielDto) {
-        return null;
+        return referentielService.save(referentielDto);
     }
 
     @Override
-    public ReferentielDto putPromo(ReferentielDto referentielDto, Long id) {
-        return null;
+    public ReferentielDto putRef(ReferentielDto referentielDto, Long id) {
+        return referentielService.putPromo(referentielDto, id);
     }
 }
