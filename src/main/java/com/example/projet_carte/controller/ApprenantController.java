@@ -46,9 +46,10 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String numPiece, String referentiel, String promo,
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece,
+                             String sexe, String numPiece, String referentiel, String promo,
                              String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
-        return  apprenantService.save(prenom, nom, email, phone, adresse, typePiece, numPiece, referentiel, promo,
+        return  apprenantService.save(prenom, nom, email, phone, adresse, typePiece, sexe, numPiece, referentiel, promo,
                 dateNaissance, lieuNaissance, numTuteur, avatar);
     }
 

@@ -38,6 +38,7 @@ public interface ApprenantApi {
             @RequestParam("phone") String phone,
             @RequestParam("adresse") String adresse,
             @RequestParam("typePiece") String typePiece,
+            @RequestParam("sexe") String sexe,
             @RequestParam("numPiece") String numPiece,
             @RequestParam("referentiel") String referentiel,
             @RequestParam("promo") String promo,

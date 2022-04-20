@@ -30,6 +30,7 @@ public interface ApprenantService {
             String phone,
             String adresse,
             String typePiece,
+            String sexe,
             String numPiece,
             String referentiel,
             String promo,
