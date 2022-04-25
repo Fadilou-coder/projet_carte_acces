@@ -488,8 +488,8 @@ public class ApprenantServiceImpl implements ApprenantService {
         }
 
         if(userAlreadyExistsCni(apprenantDto.getNumPiece(), apprenantDto.getId())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme cni existe deja", ErrorCodes.APPRENANT_ALREADY_IN_USE,
-                    Collections.singletonList("Un autre utilisateur avec le meme cni existe deja dans la BDD"));
+            throw new InvalidEntityException("Un autre utilisateur avec le meme num de Piece existe deja", ErrorCodes.APPRENANT_ALREADY_IN_USE,
+                    Collections.singletonList("Un autre utilisateur avec le meme num de Piece existe deja dans la BDD"));
         }
 
         if(userAlreadyExistsCode(apprenantDto.getCode(), apprenantDto.getId())) {
