@@ -388,7 +388,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent()) {
