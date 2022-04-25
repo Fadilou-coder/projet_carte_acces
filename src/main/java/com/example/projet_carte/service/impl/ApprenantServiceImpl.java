@@ -416,7 +416,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                         "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.PROMO_NOT_FOUND));
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
         promo.getApprenants().forEach(apprenant -> {
             nbr.getAndSet(nbr.get() + findNbrAbscences(apprenant.getId(), dateDebut, finalDateFin));
@@ -435,7 +435,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                         "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.PROMO_NOT_FOUND));
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
         promo.getApprenants().forEach(apprenant -> {
             nbr.getAndSet(nbr.get() + findNbrRetard(apprenant.getId(), dateDebut, finalDateFin));
