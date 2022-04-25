@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(4)
+@Order(3)
 public class ApprenantFixture implements CommandLineRunner {
 
     ApprenantRepository apprenantRepository;

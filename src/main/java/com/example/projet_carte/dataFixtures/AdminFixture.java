@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(3)
+@Order(2)
 public class AdminFixture implements CommandLineRunner {
 
     private AdminRepository adminRepository;
