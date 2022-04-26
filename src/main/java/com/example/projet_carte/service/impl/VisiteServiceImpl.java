@@ -144,6 +144,7 @@ public class VisiteServiceImpl implements VisiteService {
                             visiteDto.getVisiteur().getNom(),
                             visiteDto.getVisiteur().getTypePiece(),
                             visiteDto.getVisiteur().getNumPiece(),
+                            visiteDto.getVisiteur().getSexe(),
                             visiteDto.getVisiteur().getNumTelephone())
             )));
         return VisiteDto.fromEntity(visiteRepository.save(VisiteDto.toEntity(visiteDto)));

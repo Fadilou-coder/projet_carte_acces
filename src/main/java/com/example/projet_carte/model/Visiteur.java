@@ -21,17 +21,20 @@ public class Visiteur {
     private String nom;
     private String typePiece;
     private String numPiece;
+    private String sexe;
+
     @Column(unique=true)
     private String numTelephone;
 
     @OneToMany(mappedBy = "visiteur")
     private Collection<Visites> visites;
 
-    public Visiteur(String prenom, String nom, String typePiece, String numPiece, String numTelephone) {
+    public Visiteur(String prenom, String nom, String typePiece, String numPiece, String sexe, String numTelephone) {
         this.prenom = prenom;
         this.nom = nom;
         this.typePiece = typePiece;
         this.numPiece = numPiece;
+        this.sexe = sexe;
         this.numTelephone = numTelephone;
     }
 }

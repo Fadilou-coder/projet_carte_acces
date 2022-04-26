@@ -22,6 +22,8 @@ public class VisiteurDto {
 
     private String numPiece;
 
+    private String sexe;
+
     private String numTelephone;
 
     private Collection<VisiteDto> visites;
@@ -35,6 +37,7 @@ public class VisiteurDto {
                 .nom(visiteur.getNom())
                 .typePiece(visiteur.getTypePiece())
                 .numPiece(visiteur.getNumPiece())
+                .sexe(visiteur.getSexe())
                 .numTelephone(visiteur.getNumTelephone())
                 .build();
 
@@ -50,6 +53,7 @@ public class VisiteurDto {
         visiteur.setNom(visiteurDto.getNom());
         visiteur.setTypePiece(visiteurDto.getTypePiece());
         visiteur.setNumPiece(visiteurDto.getNumPiece());
+        visiteur.setSexe(visiteurDto.getSexe());
         visiteur.setNumTelephone(visiteurDto.getNumTelephone());
         if (visiteurDto.getVisites() != null)
             visiteur.setVisites(visiteurDto.getVisites().stream().map(VisiteDto::toEntity).collect(Collectors.toList()));

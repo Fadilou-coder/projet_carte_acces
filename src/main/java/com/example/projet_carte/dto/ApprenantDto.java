@@ -21,6 +21,7 @@ public class ApprenantDto {
     private String email;
     private String phone;
     private String addresse;
+    private String typePiece;
     private String numPiece;
     private String code;
     private ReferentielDto referentiel;
@@ -42,6 +43,7 @@ public class ApprenantDto {
                 .email(apprenant.getEmail())
                 .phone(apprenant.getPhone())
                 .addresse(apprenant.getAdresse())
+                .typePiece(apprenant.getTypePiece())
                 .numPiece(apprenant.getNumPiece())
                 .code(apprenant.getCode())
                 .referentiel(ReferentielDto.fromEntity(apprenant.getReferentiel()))
@@ -65,6 +67,7 @@ public class ApprenantDto {
         apprenant.setEmail(apprenantDto.getEmail());
         apprenant.setPhone(apprenantDto.getPhone());
         apprenant.setAdresse(apprenantDto.getAddresse());
+        apprenant.setTypePiece(apprenantDto.getTypePiece());
         apprenant.setNumPiece(apprenantDto.getNumPiece());
         apprenant.setCode(apprenantDto.getCode());
         apprenant.setReferentiel(ReferentielDto.toEntity(apprenantDto.getReferentiel()));
