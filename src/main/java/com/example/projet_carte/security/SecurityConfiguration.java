@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         ;
     http
               .authorizeRequests()
-            .antMatchers("/**").access("hasAnyAuthority('ADMIN', 'SUPER_ADMIN')")
+            .antMatchers("/**").access("hasAnyAuthority('ADMIN', 'SUPER_ADMIN', 'SUPERVISEUR')")
           .anyRequest().fullyAuthenticated();
         http.addFilterBefore(applicationRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

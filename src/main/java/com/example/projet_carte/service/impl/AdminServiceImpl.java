@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
         validation(adminDto, 0L);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         adminDto.setPassword(encoder.encode("password"));
-        String body = "Bonjour M.(MMe)" + adminDto.getPrenom() + " " + adminDto.getNom() + "vous trouverez ci dessous vos parametres de connexion. " + System.getProperty("line.separator") + System.getProperty("line.separator") +
+        String body = "Bonjour M.(MMe) " + adminDto.getPrenom() + " " + adminDto.getNom() + "vous trouverez ci dessous vos parametres de connexion. " + System.getProperty("line.separator") + System.getProperty("line.separator") +
                 "Email: " + adminDto.getEmail() + System.getProperty("line.separator") + " Mot de passe: password" + System.getProperty("line.separator") + System.getProperty("line.separator") +  " Cordialement!";
         emailSenderService.sendSimpleEmail(adminDto.getEmail(), body,"Orange Digital Center");
 

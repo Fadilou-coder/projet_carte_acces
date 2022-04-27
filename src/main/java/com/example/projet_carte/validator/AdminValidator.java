@@ -33,9 +33,6 @@ public class AdminValidator {
         if (!StringUtils.hasLength(phone)) {
             errors.add("Veuillez renseigner le numero de telephone'");
         }
-        if (!phone.matches("^(33|7[05-8])[0-9]{7}$")){
-            errors.add("Numero Telephone non valide");
-        }
         if (!StringUtils.hasLength(prenom)) {
             errors.add("Veuillez renseigner le prenom'");
         }
@@ -53,9 +50,6 @@ public class AdminValidator {
         }
         if (!StringUtils.hasLength(cni)) {
             errors.add("Veuillez renseigner le cni'");
-        }
-        if (!cni.matches("(^[1-2])[0-9]{12}$")){
-            errors.add("CNI non valide");
         }
         return errors;
     }

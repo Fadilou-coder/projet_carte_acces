@@ -19,6 +19,7 @@ public class AdminDto {
     protected String typePiece;
     protected String numPiece;
     protected String password;
+    protected String sexe;
     private boolean isbloqued;
 
     public static AdminDto fromEntity(Admin admin) {
@@ -35,6 +36,7 @@ public class AdminDto {
                 .addresse(admin.getAdresse())
                 .numPiece(admin.getNumPiece())
                 .password(admin.getPassword())
+                .sexe(admin.getSexe())
                 .isbloqued(admin.isArchive())
                 .build();
 
@@ -54,6 +56,7 @@ public class AdminDto {
         admin.setTypePiece(adminDto.getTypePiece());
         admin.setNumPiece(adminDto.getNumPiece());
         admin.setPassword(adminDto.getPassword());
+        admin.setSexe(adminDto.getSexe());
         admin.setArchive(adminDto.isIsbloqued());
 
         return admin;

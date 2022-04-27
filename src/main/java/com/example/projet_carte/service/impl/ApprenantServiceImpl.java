@@ -212,7 +212,6 @@ public class ApprenantServiceImpl implements ApprenantService {
     @Override
     public ApprenantDto findById(Long id) {
         if (id == null) {
-            log.error("Apprenant id is null");
             return null;
         }
         return apprenantRepository.findByIdAndArchiveFalse(id).map(ApprenantDto::fromEntity).orElseThrow(() ->
@@ -361,6 +360,13 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
+        if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
+            throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
+                    Collections.singletonList("La date de debut est plus avanceée que la date fin"));
+
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+            return 0;
+
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (!visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
@@ -388,6 +394,12 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
+        if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
+            throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
+                    Collections.singletonList("La date de debut est plus avanceée que la date fin"));
+
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+            return 0;
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
