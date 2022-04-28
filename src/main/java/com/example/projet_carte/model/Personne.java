@@ -1,5 +1,6 @@
 package com.example.projet_carte.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Personne {
 

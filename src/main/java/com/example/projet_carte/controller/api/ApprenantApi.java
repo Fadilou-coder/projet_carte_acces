@@ -36,6 +36,7 @@ public interface ApprenantApi {
             @RequestParam("phone") String phone,
             @RequestParam("adresse") String adresse,
             @RequestParam("typePiece") String typePiece,
+            @RequestParam("sexe") String sexe,
             @RequestParam("numPiece") String numPiece,
             @RequestParam("referentiel") String referentiel,
             @RequestParam("promo") String promo,
@@ -89,10 +90,10 @@ public interface ApprenantApi {
     @GetMapping("/apprenants/{id}/nbrRetard/{dateDebut}/{dateFin}")
     Integer findNbrRetard(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
-    @GetMapping("/apprenants/{id}/nbrAbsAllApp/{dateDebut}/{dateFin}")
+    @GetMapping("/promos/{id}/nbrAbsAllApp/{dateDebut}/{dateFin}")
     Integer findNbrAbscencesAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
-    @GetMapping("/apprenants/{id}/nbrRetardAllApp/{dateDebut}/{dateFin}")
+    @GetMapping("/promos/{id}/nbrRetardAllApp/{dateDebut}/{dateFin}")
     Integer findNbrRetardAllApp(@PathVariable("id") Long id, @PathVariable("dateDebut") String dateDebut, @PathVariable("dateFin") String dateFin);
 
     @RequestMapping(value = "/apprenants/{id}", method = DELETE)

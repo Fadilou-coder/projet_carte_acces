@@ -27,6 +27,8 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,6 +52,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     CommentaireRepository commentaireRepository;
     VisiteRepository visiteRepository;
     EmailSenderService emailSenderService;
+
 
     @Override
     public List<ApprenantDto> findAll() {
@@ -76,16 +79,17 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
+    public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String sexe, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
         Random random = new Random();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (referentielRepository.findByLibelle(referentiel).isPresent() && promoRepository.findByLibelle(promo).isPresent()) {
             String code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000)+ 1001);
             while(apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()){
                 code = promoRepository.findByLibelle(promo).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
             }
             ApprenantDto apprenantDto = new ApprenantDto(
-                    null, prenom, nom, email, phone, adresse, typePiece, numPiece, code,
+                    null, prenom, nom, email, encoder.encode("password"), phone, adresse, typePiece, sexe, numPiece, code,
                     ReferentielDto.fromEntity(referentielRepository.findByLibelle(referentiel).get()), PromoDto.fromEntity(promoRepository.findByLibelle(promo).get()),
                     LocalDate.parse(dateNaissance), lieuNaissance, numTuteur, avatar.getBytes(), null
             );
@@ -101,6 +105,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         String TYPE = "text/csv";
         String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "TypePiece", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
         List<ApprenantDto> apps = new ArrayList<>();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (TYPE.equals(file.getContentType())) {
             try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
                  CSVParser csvParser = new CSVParser(fileReader,
@@ -112,9 +117,11 @@ public class ApprenantServiceImpl implements ApprenantService {
                             csvRecord.get("prenom"),
                             csvRecord.get("nom"),
                             csvRecord.get("email"),
+                            encoder.encode("password"),
                             csvRecord.get("phone"),
                             csvRecord.get("adresse"),
                             csvRecord.get("typePiece"),
+                            csvRecord.get("sexe"),
                             csvRecord.get("numPiece"),
                             null,
                             ReferentielDto.fromEntity(referentielRepository.findByLibelle(csvRecord.get("referentiel")).get()),
@@ -140,7 +147,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
                 for(int i=0; i<sheet.getPhysicalNumberOfRows();i++) {
                     XSSFRow row = sheet.getRow(i);
-                    if (row.getPhysicalNumberOfCells() == 12){
+                    if (row.getPhysicalNumberOfCells() == 13){
                         if (i == 0){
                             for(int j=0;j<row.getPhysicalNumberOfCells();j++) {
                                 if (!Objects.equals(HEADERs[j], row.getCell(j).toString()))
@@ -158,18 +165,20 @@ public class ApprenantServiceImpl implements ApprenantService {
                                         row.getCell(0).toString(),
                                         row.getCell(1).toString(),
                                         row.getCell(2).toString(),
+                                        encoder.encode("password"),
                                         row.getCell(3).toString(),
                                         row.getCell(4).toString(),
                                         row.getCell(5).toString(),
+                                        row.getCell(7).toString(),
                                         row.getCell(6).toString(),
                                         code,
-                                        referentielRepository.findByLibelle(row.getCell(7).toString()).isPresent() ?
+                                        referentielRepository.findByLibelle(row.getCell(8).toString()).isPresent() ?
                                                 ReferentielDto.fromEntity(referentielRepository.findByLibelle(row.getCell(6).toString()).get()) : null,
-                                        promoRepository.findByLibelle(row.getCell(8).toString()).isPresent() ?
+                                        promoRepository.findByLibelle(row.getCell(9).toString()).isPresent() ?
                                                 PromoDto.fromEntity(promoRepository.findByLibelle(row.getCell(7).toString()).get()) : null,
-                                        row.getCell(9).getLocalDateTimeCellValue().toLocalDate(),
-                                        row.getCell(10).toString(),
+                                        row.getCell(10).getLocalDateTimeCellValue().toLocalDate(),
                                         row.getCell(11).toString(),
+                                        row.getCell(12).toString(),
                                         null,
                                         new ArrayList<>()
                                 );
@@ -273,6 +282,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
     @Override
     public ApprenantDto putFieldApp(Long id, ApprenantDto apprenantDto){
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (id == null) {
             return null;
         }
@@ -312,6 +322,10 @@ public class ApprenantServiceImpl implements ApprenantService {
         }
         if (!Objects.equals(apprenantDto.getNumTuteur(), "") && apprenantDto.getNumTuteur() != null) {
             apprenant.setNumTuteur(apprenantDto.getNumTuteur());
+        }
+
+        if (!Objects.equals(apprenantDto.getPassword(), "") && apprenantDto.getPassword() != null) {
+            apprenant.setPassword(encoder.encode(apprenantDto.getPassword()));
         }
 
         validation(ApprenantDto.fromEntity(apprenant));
@@ -378,7 +392,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent()) {
@@ -406,7 +420,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                         "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.PROMO_NOT_FOUND));
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
         promo.getApprenants().forEach(apprenant -> {
             nbr.getAndSet(nbr.get() + findNbrAbscences(apprenant.getId(), dateDebut, finalDateFin));
@@ -425,7 +439,7 @@ public class ApprenantServiceImpl implements ApprenantService {
                         "Aucun promo avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.PROMO_NOT_FOUND));
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
-        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() > 0) dateFin = LocalDate.now().plusDays(1);
+        if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
         promo.getApprenants().forEach(apprenant -> {
             nbr.getAndSet(nbr.get() + findNbrRetard(apprenant.getId(), dateDebut, finalDateFin));
