@@ -15,7 +15,7 @@ public class PersonneValidator {
                 userDto.getCode(),  userDto.getDateNaissance(), userDto.getLieuNaissance(), userDto.getNumTuteur());
     }
 
-    private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone, String addresse, String cni,
+    private static List<String> getStrings(boolean b, String prenom, String nom, String email, String phone, String addresse, String numPiece,
                                            String code, LocalDate dateNaissance, String lieuNaissance, String numTuteur) {
         List<String> errors = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class PersonneValidator {
             errors.add("Veuillez renseigner le prenom'");
             errors.add("Veuillez renseigner le nom'");
             errors.add("Veuillez renseigner l'email'");
-            errors.add("Veuillez renseigner le cni'");
+            errors.add("Veuillez renseigner le numéro de piece'");
             errors.add("Veuillez renseigner le code'");
             errors.add("Veuillez renseigner le lieu de naissance'");
             errors.add("Veuillez renseigner l'adresse'");
@@ -33,11 +33,8 @@ public class PersonneValidator {
             return errors;
         }
 
-        if (!StringUtils.hasLength(cni)) {
-            errors.add("Veuillez renseigner le cni'");
-        }
-        if (!cni.matches("(^[1-2])[0-9]{12}$")){
-            errors.add("CNI non valide");
+        if (!StringUtils.hasLength(numPiece)) {
+            errors.add("Veuillez renseigner le numéro de Piece'");
         }
         if (!StringUtils.hasLength(prenom)) {
             errors.add("Veuillez renseigner le prenom'");
@@ -62,9 +59,6 @@ public class PersonneValidator {
         }
         if (!StringUtils.hasLength(email)) {
             errors.add("Veuillez renseigner le Email'");
-        }
-        if (!phone.matches("^(33|7[05-8])[0-9]{7}$")){
-            errors.add("Numero Telephone non valide");
         }
         if (dateNaissance == null) {
             errors.add("Veuillez renseigner la date de naissance'");

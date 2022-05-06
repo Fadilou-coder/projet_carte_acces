@@ -17,6 +17,7 @@ public class SuperviseurDto {
     protected String addresse;
     protected String numPiece;
     protected String password;
+    protected String sexe;
 
 
     public static SuperviseurDto fromEntity(Superviseur superviseur) {
@@ -32,6 +33,7 @@ public class SuperviseurDto {
                 .addresse(superviseur.getAdresse())
                 .numPiece(superviseur.getNumPiece())
                 .password(superviseur.getPassword())
+                .sexe(superviseur.getSexe())
                 .build();
 
     }
@@ -47,6 +49,7 @@ public class SuperviseurDto {
         superviseur.setEmail(superviseurDto.getEmail());
         superviseur.setPhone(superviseurDto.getPhone());
         superviseur.setAdresse(superviseurDto.getAddresse());
+        superviseur.setSexe(superviseurDto.getSexe());
         superviseur.setNumPiece(superviseurDto.getNumPiece());
         superviseur.setPassword(superviseurDto.getPassword());
 

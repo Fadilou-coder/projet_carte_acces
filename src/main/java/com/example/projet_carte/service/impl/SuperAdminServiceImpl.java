@@ -98,8 +98,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private void validation(SuperAdminDto superAdminDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(null, superAdminDto, "superAdmin");
 
-        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, null, adminRepository, superAdminDto.getEmail(), superAdminDto.getPhone());
-
+        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, null, adminRepository, superAdminDto.getEmail(), superAdminDto.getPhone(), superAdminDto.getNumPiece());
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.ADMIN_NOT_VALID, errors);
         }

@@ -99,7 +99,7 @@ public class SuperviseurServiceImpl implements SuperviseurService {
     private void validation(SuperviseurDto superviseurDto, Long id) {
         List<String> errors = SuperAdminValidator.validate(superviseurDto, null, "superviseur");
 
-        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, superviseurDto.getEmail(), superviseurDto.getPhone());
+        AdminServiceImpl.ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, superviseurDto.getEmail(), superviseurDto.getPhone(), superviseurDto.getNumPiece());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("Erreur!!!!!!", ErrorCodes.SUPERVISEUR_NOT_VALID, errors);

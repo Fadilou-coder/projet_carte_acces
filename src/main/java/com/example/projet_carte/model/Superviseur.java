@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 public class Superviseur extends Personne {
     public Superviseur(String prenom, String nom, String email, String phone,
                        String adresse, String typePiece, String numPiece, String sexe, String password){
-        super(prenom, nom, email, phone, adresse, typePiece, numPiece, sexe, password, "SUPER_ADMIN" );
+        super(prenom, nom, email, phone, adresse, typePiece, numPiece, sexe, password, "SUPERVISEUR" );
 
     }
 }

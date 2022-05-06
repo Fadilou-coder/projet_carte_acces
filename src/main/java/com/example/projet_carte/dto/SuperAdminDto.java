@@ -18,6 +18,7 @@ public class SuperAdminDto {
     protected String phone;
     protected String addresse;
     protected String numPiece;
+    protected String sexe;
     protected String password;
 
 
@@ -33,6 +34,7 @@ public class SuperAdminDto {
                 .phone(superAdmin.getPhone())
                 .addresse(superAdmin.getAdresse())
                 .numPiece(superAdmin.getNumPiece())
+                .sexe(superAdmin.getSexe())
                 .password(superAdmin.getPassword())
                 .build();
 
@@ -50,6 +52,7 @@ public class SuperAdminDto {
         superAdmin.setPhone(superAdminDto.getPhone());
         superAdmin.setAdresse(superAdminDto.getAddresse());
         superAdmin.setNumPiece(superAdminDto.getNumPiece());
+        superAdmin.setSexe(superAdminDto.getSexe());
         superAdmin.setPassword(superAdminDto.getPassword());
 
         return superAdmin;

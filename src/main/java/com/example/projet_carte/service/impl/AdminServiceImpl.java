@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
         validation(adminDto, 0L);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         adminDto.setPassword(encoder.encode("password"));
-        String body = "Bonjour M.(MMe)" + adminDto.getPrenom() + " " + adminDto.getNom() + "vous trouverez ci dessous vos parametres de connexion. " + System.getProperty("line.separator") + System.getProperty("line.separator") +
+        String body = "Bonjour M.(MMe) " + adminDto.getPrenom() + " " + adminDto.getNom() + "vous trouverez ci dessous vos parametres de connexion. " + System.getProperty("line.separator") + System.getProperty("line.separator") +
                 "Email: " + adminDto.getEmail() + System.getProperty("line.separator") + " Mot de passe: password" + System.getProperty("line.separator") + System.getProperty("line.separator") +  " Cordialement!";
         emailSenderService.sendSimpleEmail(adminDto.getEmail(), body,"Orange Digital Center");
 
@@ -120,7 +120,7 @@ public class AdminServiceImpl implements AdminService {
     private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
-        ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, adminDto.getEmail(), adminDto.getPhone());
+        ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, adminDto.getEmail(), adminDto.getPhone(), adminDto.getNumPiece());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
@@ -128,7 +128,7 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, SuperviseurRepository superviseurRepository, AdminRepository adminRepository, String email, String phone) {
+    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, SuperviseurRepository superviseurRepository, AdminRepository adminRepository, String email, String phone, String numPiece) {
 
             if (superAdminRepository.findByEmailAndIdNot(email, id).isPresent() || adminRepository.findByEmailAndIdNot(email, id).isPresent() || superviseurRepository.findByEmailAndIdNot(email, id).isPresent() ) {
                 errors.add("un utilisateur avec ce email existe deja dans la base de données");
@@ -136,6 +136,9 @@ public class AdminServiceImpl implements AdminService {
 
             if (superAdminRepository.findByPhoneAndIdNot(phone, id).isPresent() || adminRepository.findByPhoneAndIdNot(phone, id).isPresent() || superviseurRepository.findByPhoneAndIdNot(phone, id).isPresent()) {
                 errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
+            }
+            if(superAdminRepository.findByNumPieceAndIdNot(numPiece, id).isPresent() || adminRepository.findByNumPieceAndIdNot(numPiece, id).isPresent() || superviseurRepository.findByNumPieceAndIdNot(numPiece, id).isPresent()){
+                errors.add("un utilisateur avec ce numero de piece existe deja dans la base de données");
             }
     }
 
