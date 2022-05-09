@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,14 +59,21 @@ public class SuperviseurServiceImpl implements SuperviseurService {
                         "Aucun utilisateur avec l'id = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.SUPERVISEUR_NOT_FOUND)
         );
-        validation(superviseurDto, id);
+
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        superviseur.setAdresse(superviseurDto.getAddresse());
-        superviseur.setPrenom(superviseurDto.getPrenom());
-        superviseur.setNom(superviseur.getNom());
-        superviseur.setNumPiece(superviseurDto.getNumPiece());
-        superviseur.setPhone(superviseurDto.getPhone());
-        superviseur.setPassword(encoder.encode(superviseurDto.getPassword()));
+        if (!Objects.equals(superviseurDto.getAddresse(), ""))
+            superviseur.setAdresse(superviseurDto.getAddresse());
+        if (!Objects.equals(superviseurDto.getPrenom(), ""))
+            superviseur.setPrenom(superviseurDto.getPrenom());
+        if (!Objects.equals(superviseurDto.getNom(), ""))
+            superviseur.setNom(superviseur.getNom());
+        if (!Objects.equals(superviseurDto.getNumPiece(), ""))
+            superviseur.setNumPiece(superviseurDto.getNumPiece());
+        if (!Objects.equals(superviseurDto.getPhone(), ""))
+            superviseur.setPhone(superviseurDto.getPhone());
+        if (!Objects.equals(superviseurDto.getPassword(), ""))
+            superviseur.setPassword(encoder.encode(superviseurDto.getPassword()));
+        validation(SuperviseurDto.fromEntity(superviseur), id);
 
         superviseurRepository.flush();
 
