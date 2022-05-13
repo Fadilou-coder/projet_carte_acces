@@ -226,6 +226,18 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
+    public ApprenantDto findByCode(String code) {
+        if (code == null) {
+            return null;
+        }
+        return apprenantRepository.findByCodeAndArchiveFalse(code).map(ApprenantDto::fromEntity).orElseThrow(() ->
+            new EntityNotFoundException(
+                "Aucun Apprenant avec le code = " + code + " ne se trouve dans la BDD",
+                ErrorCodes.APPRENANT_NOT_FOUND)
+        );
+    }
+
+    @Override
     public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse,  String typePiece, String numPiece, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         if (id == null) {
             log.error("Apprenant Id is null");

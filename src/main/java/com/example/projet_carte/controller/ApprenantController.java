@@ -31,6 +31,11 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public ApprenantDto findByCode(String code) {
+        return apprenantService.findByCode(code);
+    }
+
+    @Override
     public List<ApprenantDto> findByref(Long id) {
         return apprenantService.findByref(id);
     }

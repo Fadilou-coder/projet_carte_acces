@@ -19,6 +19,9 @@ public interface ApprenantApi {
     @GetMapping("/apprenants/{id}")
     ApprenantDto findById(@PathVariable Long id);
 
+    @GetMapping("/apprenant/code/{code}")
+    ApprenantDto findByCode(@PathVariable String code);
+
     @GetMapping("/referentiel/{id}/apprenants")
     List<ApprenantDto> findByref(@PathVariable Long id);
 

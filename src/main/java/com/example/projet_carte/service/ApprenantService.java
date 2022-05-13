@@ -46,6 +46,7 @@ public interface ApprenantService {
     void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException;
 
       ApprenantDto findById(Long id);
+      ApprenantDto findByCode(String code);
 
     ApprenantDto put(Long id,
                      String prenom,
