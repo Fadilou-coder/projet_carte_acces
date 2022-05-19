@@ -16,6 +16,9 @@ public interface ApprenantApi {
     @GetMapping("/apprenants")
     List<ApprenantDto> findAll();
 
+    @GetMapping("/apprenantsSanctionner")
+    List<ApprenantDto> findSanctionner();
+
     @GetMapping("/apprenants/{id}")
     ApprenantDto findById(@PathVariable Long id);
 

@@ -17,6 +17,8 @@ public interface ApprenantService {
 
     List<ApprenantDto> findAll();
 
+    List<ApprenantDto> findSanctionner();
+
     List<ApprenantDto> findByref(Long id);
 
     List<ApprenantDto> findBypromo(Long id);

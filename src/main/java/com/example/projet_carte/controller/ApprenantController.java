@@ -26,6 +26,11 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public List<ApprenantDto> findSanctionner() {
+        return apprenantService.findSanctionner();
+    }
+
+    @Override
     public ApprenantDto findById(Long id) {
         return apprenantService.findById(id);
     }
