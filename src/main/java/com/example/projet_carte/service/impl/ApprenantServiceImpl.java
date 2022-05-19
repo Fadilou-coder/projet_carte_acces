@@ -402,7 +402,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
                     Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
-        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
             return 0;
 
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
@@ -436,7 +436,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
                     Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
-        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
             return 0;
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
