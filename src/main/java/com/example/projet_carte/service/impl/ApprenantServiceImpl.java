@@ -93,7 +93,6 @@ public class ApprenantServiceImpl implements ApprenantService {
     public List<ApprenantDto> findByRefByPromo(Long idRef, Long idPr) {
         return apprenantRepository.findByPromoIdAndReferentielIdAndArchiveFalse(idPr, idRef).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
     }
-
     @Override
     public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String sexe, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
