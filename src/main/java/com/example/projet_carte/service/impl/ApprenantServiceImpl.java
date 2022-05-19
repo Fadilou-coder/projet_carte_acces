@@ -63,11 +63,16 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
-    public List<ApprenantDto> findSanctionner() {
+    public List<ApprenantDto> findSanctionner(Long id) {
+        if (id == null) return null;
+        promoRepository.findById(id).orElseThrow(() ->
+            new EntityNotFoundException(
+                "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                ErrorCodes.PROMO_NOT_FOUND));
         AtomicInteger nbrAbs = new AtomicInteger();
         AtomicInteger nbrRtd = new AtomicInteger();
         List<Apprenant> apps = new ArrayList<>();
-        apprenantRepository.findAllByArchiveFalse().forEach(apprenant -> {
+        apprenantRepository.findByPromoIdAndArchiveFalse(id).forEach(apprenant -> {
             nbrAbs.set(findNbrAbscences(apprenant.getId(), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1)));
             nbrRtd.set(findNbrRetard(apprenant.getId(), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1)));
             if (nbrAbs.get() >= 3 || nbrRtd.get() >= 60)
