@@ -521,6 +521,20 @@ public class ApprenantServiceImpl implements ApprenantService {
         return commentaireRepository.findByApprenantId(id).stream().map(CommentaireDto::fromEntity).collect(Collectors.toList());
     }
 
+    @Override
+    public List<CommentaireDto> findAllComments() {
+        return commentaireRepository.findAll().stream()
+            .map(CommentaireDto::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentaireDto> commentsByDate(LocalDate date) {
+        return commentaireRepository.findByDate(date).stream()
+            .map(CommentaireDto::fromEntity)
+            .collect(Collectors.toList());
+    }
+
     private void validation(ApprenantDto apprenantDto) {
         List<String> errors = PersonneValidator.Appvalidate(apprenantDto);
         if(userAlreadyExists(apprenantDto.getEmail(), apprenantDto.getId())) {

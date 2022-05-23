@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
@@ -68,6 +69,12 @@ public interface ApprenantApi {
 
     @GetMapping("/apprenants/{id}/comments")
     List<CommentaireDto> findcommentsByApp(@PathVariable Long id);
+
+    @GetMapping("/comments")
+    List<CommentaireDto> findAllComments();
+
+    @GetMapping("/comments/{date}")
+    List<CommentaireDto> commentsByDate(LocalDate date);
 
     @PutMapping("/apprenants/{id}")
     ApprenantDto put(@PathVariable Long id,

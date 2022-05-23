@@ -78,4 +78,8 @@ public interface ApprenantService {
     CommentaireDto addComment(CommentaireDto commentaire);
 
     List<CommentaireDto> commentsApp(Long id);
+
+    List<CommentaireDto> findAllComments();
+
+    List<CommentaireDto> commentsByDate(LocalDate date);
 }

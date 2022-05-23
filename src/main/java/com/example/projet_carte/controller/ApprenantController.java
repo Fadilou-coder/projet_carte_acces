@@ -84,6 +84,16 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public List<CommentaireDto> findAllComments() {
+        return apprenantService.findAllComments();
+    }
+
+    @Override
+    public List<CommentaireDto> commentsByDate(LocalDate date) {
+        return apprenantService.commentsByDate(date);
+    }
+
+    @Override
     public ApprenantDto put(Long id, String prenom, String nom, String email, String phone, String adresse, String typePiece, String numPiece,
                             String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
         return apprenantService.put(id, prenom, nom, email, phone, adresse, typePiece, numPiece,
