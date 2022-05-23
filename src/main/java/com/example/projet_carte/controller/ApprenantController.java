@@ -89,8 +89,8 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
-    public List<CommentaireDto> commentsByDate(LocalDate date) {
-        return apprenantService.commentsByDate(date);
+    public List<CommentaireDto> commentsByDate(String date) {
+        return apprenantService.commentsByDate(LocalDate.parse(date));
     }
 
     @Override

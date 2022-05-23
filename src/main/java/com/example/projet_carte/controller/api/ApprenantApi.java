@@ -74,7 +74,7 @@ public interface ApprenantApi {
     List<CommentaireDto> findAllComments();
 
     @GetMapping("/comments/{date}")
-    List<CommentaireDto> commentsByDate(@PathVariable LocalDate date);
+    List<CommentaireDto> commentsByDate(@PathVariable String date);
 
     @PutMapping("/apprenants/{id}")
     ApprenantDto put(@PathVariable Long id,
