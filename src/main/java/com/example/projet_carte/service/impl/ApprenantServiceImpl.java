@@ -513,6 +513,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("l'apprenant choisi n'existe pas dans la base de BDD", ErrorCodes.APPRENANT_NOT_FOUND,
                     Collections.singletonList("l'apprenant choisi n'existe pas dans la base de BDD"));
         }
+        commentaire.setDate(LocalDate.now());
         return CommentaireDto.fromEntity(commentaireRepository.save(CommentaireDto.toEntity(commentaire)));
     }
 
