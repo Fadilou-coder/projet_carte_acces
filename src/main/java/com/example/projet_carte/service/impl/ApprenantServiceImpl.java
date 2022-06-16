@@ -192,7 +192,6 @@ public class ApprenantServiceImpl implements ApprenantService {
                 ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -473,7 +472,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     @Override
     public CommentaireDto addComment(CommentaireDto commentaire) {
         if (commentaire.getCommentaire().isEmpty()){
-            throw new InvalidEntityException("Veuillez Saisir quelsue chose", ErrorCodes.APPRENANT_NOT_FOUND,
+            throw new InvalidEntityException("Veuillez Saisir quelque chose", ErrorCodes.APPRENANT_NOT_FOUND,
                     Collections.singletonList("Veuillez Saisir quelque chose"));
         }else if (!apprenantRepository.findById(commentaire.getApprenant().getId()).isPresent()){
             throw new InvalidEntityException("l'apprenant choisi n'existe pas dans la base de BDD", ErrorCodes.APPRENANT_NOT_FOUND,

@@ -2,7 +2,7 @@ package com.example.projet_carte.dto;
         import com.example.projet_carte.model.Referentiel;
         import com.fasterxml.jackson.annotation.JsonIgnore;
         import lombok.Builder;
-        import lombok.Data;;
+        import lombok.Data;
         import java.util.Collection;
 
 @Data

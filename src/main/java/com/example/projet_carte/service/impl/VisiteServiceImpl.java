@@ -13,7 +13,6 @@ import com.example.projet_carte.repository.VisiteurRepository;
 import com.example.projet_carte.service.VisiteService;
 import com.example.projet_carte.validator.VisiteursValidator;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +23,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class VisiteServiceImpl implements VisiteService {
 

@@ -2,13 +2,11 @@ package com.example.projet_carte.controller.api;
 
 import com.example.projet_carte.dto.ApprenantDto;
 import com.example.projet_carte.dto.CommentaireDto;
-import com.example.projet_carte.dto.ReferentielDto;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 

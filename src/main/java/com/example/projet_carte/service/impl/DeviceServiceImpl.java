@@ -5,7 +5,6 @@ import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.DeviceAutoriser;
-import com.example.projet_carte.model.Promo;
 import com.example.projet_carte.repository.DevicesRepository;
 import com.example.projet_carte.service.DeviceService;
 import lombok.AllArgsConstructor;

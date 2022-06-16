@@ -3,12 +3,10 @@ package com.example.projet_carte.service.impl;
 import com.example.projet_carte.dto.VisiteurDto;
 import com.example.projet_carte.exception.EntityNotFoundException;
 import com.example.projet_carte.exception.ErrorCodes;
-import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Visiteur;
 import com.example.projet_carte.repository.VisiteurRepository;
 import com.example.projet_carte.service.VisiteurService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class VisiteurServiceImpl implements VisiteurService {
 

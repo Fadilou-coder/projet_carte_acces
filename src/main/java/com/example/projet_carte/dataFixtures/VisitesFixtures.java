@@ -1,7 +1,6 @@
 package com.example.projet_carte.dataFixtures;
 
 import com.example.projet_carte.model.Visites;
-import com.example.projet_carte.model.Visiteur;
 import com.example.projet_carte.repository.ApprenantRepository;
 import com.example.projet_carte.repository.VisiteRepository;
 import com.example.projet_carte.repository.VisiteurRepository;

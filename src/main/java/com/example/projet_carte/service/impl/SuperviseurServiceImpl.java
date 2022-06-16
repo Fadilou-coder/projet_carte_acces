@@ -11,7 +11,6 @@ import com.example.projet_carte.repository.SuperviseurRepository;
 import com.example.projet_carte.service.SuperviseurService;
 import com.example.projet_carte.validator.SuperAdminValidator;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class SuperviseurServiceImpl implements SuperviseurService {
     private SuperviseurRepository superviseurRepository;

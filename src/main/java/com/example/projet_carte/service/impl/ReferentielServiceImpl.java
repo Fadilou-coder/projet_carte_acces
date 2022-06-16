@@ -9,14 +9,12 @@ import com.example.projet_carte.model.Referentiel;
 import com.example.projet_carte.repository.ReferentielRepository;
 import com.example.projet_carte.service.ReferentielService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class ReferentielServiceImpl implements ReferentielService {

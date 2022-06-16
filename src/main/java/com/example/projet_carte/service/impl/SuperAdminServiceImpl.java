@@ -10,7 +10,6 @@ import com.example.projet_carte.repository.SuperAdminRepository;
 import com.example.projet_carte.service.SuperAdminService;
 import com.example.projet_carte.validator.SuperAdminValidator;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class SuperAdminServiceImpl implements SuperAdminService {
 

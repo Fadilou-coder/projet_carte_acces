@@ -2,9 +2,7 @@ package com.example.projet_carte.validator;
 
 import com.example.projet_carte.dto.SuperAdminDto;
 import com.example.projet_carte.dto.SuperviseurDto;
-import com.example.projet_carte.repository.SuperAdminRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -12,10 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
-@Slf4j
 public class SuperAdminValidator {
-
-    private SuperAdminRepository superAdminRepository;
 
     public static List<String> validate(SuperviseurDto superviseurDto, SuperAdminDto superAdminDto, String admin)
     {
