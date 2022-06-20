@@ -365,9 +365,12 @@ public class ApprenantServiceImpl implements ApprenantService {
 
         if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
             return 0;
-
+        LocalDate db = dateDebut;
+        if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() < 0) {
+            db = apprenant.getPromo().getDateDebut();
+        }
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
-        for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+    for (LocalDate i = db; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (!visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent())
                 nbr++;
