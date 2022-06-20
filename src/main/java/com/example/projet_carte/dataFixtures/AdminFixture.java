@@ -19,7 +19,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 @Component
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
-@Order(2)
+@Order(1)
 public class AdminFixture implements CommandLineRunner {
 
     private AdminRepository adminRepository;
@@ -32,15 +32,15 @@ public class AdminFixture implements CommandLineRunner {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
 
-        adminRepository.saveAll(Arrays.asList(
-                new Admin("Omar", "Faye", "omzo@gmail.com", "777777777", "Scat Urbain", "CNI", "1113123401234", "M", encodedPassword),
-                new Admin("Mamadou", "Sylla", "sylla@gmail.com", "707777777", "Dakar", "CNI", "1113123401235", "M", encodedPassword)
-        ));
+        // adminRepository.saveAll(Arrays.asList(
+                // new Admin("Omar", "Faye", "omzo@gmail.com", "777777777", "Scat Urbain", "CNI", "1113123401234", "M", encodedPassword),
+                // new Admin("Mamadou", "Sylla", "sylla@gmail.com", "707777777", "Dakar", "CNI", "1113123401235", "M", encodedPassword)
+        // ));
+// 
+        superAdminRepository.save(new SuperAdmin("Cheikh Babacar", "Goudiaby", "bacargoudiaby@gmail.com", "781527088", "Guediawaye, Cité Sentenac", "CNI", "123417799011", "M", encodedPassword));
 
-        superAdminRepository.save(new SuperAdmin("Babacar", "Goudiaby", "cbag@gmail.com", "787777777", "Guédiawaye", "CNI", "1113123401245", "M", encodedPassword));
-
-        superviseurRepository.save(new Superviseur("Asna Khadim", "Gueye", "asnakhadim@gmail.com", "788777777", "HLM", "CNI", "1113123400645", "M", encodedPassword));
-
-
+        // superviseurRepository.save(new Superviseur("Asna Khadim", "Gueye", "asnakhadim@gmail.com", "788777777", "HLM", "CNI", "1113123400645", "M", encodedPassword));
+// 
+// 
     }
 }
