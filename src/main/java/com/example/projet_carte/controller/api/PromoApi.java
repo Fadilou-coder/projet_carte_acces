@@ -1,6 +1,5 @@
 package com.example.projet_carte.controller.api;
 
-
 import com.example.projet_carte.dto.PromoDto;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -17,5 +16,4 @@ public interface PromoApi {
 
     @PutMapping("/promos/{id}")
     PromoDto putPromo(@RequestBody PromoDto promoDto, @PathVariable Long id);
-
 }

@@ -25,7 +25,6 @@ public class AdminValidator {
             errors.add("Veuillez renseigner le numero de telephone'");
             errors.add("Veuillez renseigner l'adresse'");
             errors.add("Veuillez renseigner la carte d'identité'");
-            errors.add("Veuillez renseigner le username'");
             errors.add("Veuillez renseigner le structure'");
             return errors;
         }

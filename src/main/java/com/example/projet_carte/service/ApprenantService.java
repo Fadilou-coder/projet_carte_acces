@@ -12,6 +12,8 @@ public interface ApprenantService {
 
     List<ApprenantDto> findAll();
 
+    List<ApprenantDto> findSanctionner(Long id);
+
     List<ApprenantDto> findByref(Long id);
 
     List<ApprenantDto> findBypromo(Long id);
@@ -41,6 +43,7 @@ public interface ApprenantService {
     void sendCarte(String prenom, String nom, String email, MultipartFile file) throws IOException;
 
       ApprenantDto findById(Long id);
+      ApprenantDto findByCode(String code);
 
     ApprenantDto put(Long id,
                      String prenom,
@@ -70,4 +73,8 @@ public interface ApprenantService {
     CommentaireDto addComment(CommentaireDto commentaire);
 
     List<CommentaireDto> commentsApp(Long id);
+
+    List<CommentaireDto> findAllComments();
+
+    List<CommentaireDto> commentsByDate(LocalDate date);
 }

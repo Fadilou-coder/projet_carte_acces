@@ -31,8 +31,8 @@ public class VisiteurServiceImpl implements VisiteurService {
         }else {
             Visiteur visiteur = visiteurRepository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException(
-                            "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
-                            ErrorCodes.APPRENANT_NOT_FOUND));
+                            "Aucun visiteur avec l'ID = " + id + " ne se trouve dans la BDD",
+                            ErrorCodes.VISITEUR_NOT_VALID));
             if (!Objects.equals(visiteurDto.getNom(), ""))
                 visiteur.setNom(visiteurDto.getNom());
             if (!Objects.equals(visiteurDto.getPrenom(), ""))

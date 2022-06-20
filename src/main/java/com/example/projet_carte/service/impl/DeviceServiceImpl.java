@@ -24,6 +24,9 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceDto save(DeviceDto deviceDto) {
         if (Objects.equals(deviceDto.getMacAdress(), ""))
             throw new InvalidEntityException("Veuillez renseignez l'adresse mac");
+        if (repository.findByMacAdress(deviceDto.getMacAdress()).isPresent())
+            throw new InvalidEntityException("Cette adresse existe deja dans la BBD");
+
 
         return DeviceDto.fromEntity(repository.save(DeviceDto.toEntity(deviceDto)));
     }

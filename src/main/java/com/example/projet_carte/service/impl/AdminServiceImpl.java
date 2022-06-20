@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -74,13 +75,18 @@ public class AdminServiceImpl implements AdminService {
                 new EntityNotFoundException(
                         "Aucun admin avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.ADMIN_NOT_FOUND));
-        admin.setPrenom(adminDto.getPrenom());
-        admin.setNom(adminDto.getNom());
-        admin.setEmail(adminDto.getEmail());
-        admin.setPhone(adminDto.getPhone());
-        admin.setAdresse(adminDto.getAddresse());
-        admin.setNumPiece(adminDto.getNumPiece());
-        admin.setArchive(adminDto.isIsbloqued());
+        if (!Objects.equals(adminDto.getPrenom(), ""))
+            admin.setPrenom(adminDto.getPrenom());
+        if (!Objects.equals(adminDto.getNom(), ""))
+            admin.setNom(adminDto.getNom());
+        if (!Objects.equals(adminDto.getEmail(), ""))
+            admin.setEmail(adminDto.getEmail());
+        if (!Objects.equals(adminDto.getPhone(), ""))
+            admin.setPhone(adminDto.getPhone());
+        if (!Objects.equals(adminDto.getAddresse(), ""))
+            admin.setAdresse(adminDto.getAddresse());
+        if (!Objects.equals(adminDto.getNumPiece(), ""))
+            admin.setNumPiece(adminDto.getNumPiece());
 
         AdminDto adminDto1 = AdminDto.fromEntity(admin);
         validation(adminDto1, id);
@@ -120,7 +126,7 @@ public class AdminServiceImpl implements AdminService {
     private void validation(AdminDto adminDto, Long id) {
         List<String> errors = AdminValidator.validateAd(adminDto);
 
-        ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, adminDto.getEmail(), adminDto.getPhone());
+        ArealyExist(id, errors, superAdminRepository, superviseurRepository, adminRepository, adminDto.getEmail(), adminDto.getPhone(), adminDto.getNumPiece());
 
         if (!errors.isEmpty()) {
             throw new InvalidEntityException("L'Admin n'est pas valide", ErrorCodes.ADMIN_NOT_VALID, errors);
@@ -128,7 +134,7 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, SuperviseurRepository superviseurRepository, AdminRepository adminRepository, String email, String phone) {
+    static void ArealyExist(Long id, List<String> errors, SuperAdminRepository superAdminRepository, SuperviseurRepository superviseurRepository, AdminRepository adminRepository, String email, String phone, String numPiece) {
 
             if (superAdminRepository.findByEmailAndIdNot(email, id).isPresent() || adminRepository.findByEmailAndIdNot(email, id).isPresent() || superviseurRepository.findByEmailAndIdNot(email, id).isPresent() ) {
                 errors.add("un utilisateur avec ce email existe deja dans la base de données");
@@ -136,6 +142,9 @@ public class AdminServiceImpl implements AdminService {
 
             if (superAdminRepository.findByPhoneAndIdNot(phone, id).isPresent() || adminRepository.findByPhoneAndIdNot(phone, id).isPresent() || superviseurRepository.findByPhoneAndIdNot(phone, id).isPresent()) {
                 errors.add("un utilisateur avec ce numero téléphone existe deja dans la base de données");
+            }
+            if(superAdminRepository.findByNumPieceAndIdNot(numPiece, id).isPresent() || adminRepository.findByNumPieceAndIdNot(numPiece, id).isPresent() || superviseurRepository.findByNumPieceAndIdNot(numPiece, id).isPresent()){
+                errors.add("un utilisateur avec ce numero de piece existe deja dans la base de données");
             }
     }
 

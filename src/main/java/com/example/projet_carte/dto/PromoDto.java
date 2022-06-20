@@ -34,7 +34,6 @@ public class PromoDto {
         if(promoDto == null) return null;
 
         Promo promo = new Promo();
-
         promo.setId(promoDto.getId());
         promo.setLibelle(promoDto.getLibelle());
         promo.setDateDebut(promoDto.getDateDebut());

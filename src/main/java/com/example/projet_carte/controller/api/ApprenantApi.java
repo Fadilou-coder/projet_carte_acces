@@ -16,8 +16,14 @@ public interface ApprenantApi {
     @GetMapping("/apprenants")
     List<ApprenantDto> findAll();
 
+    @GetMapping("/promo/{id}/apprenantsSanctionner")
+    List<ApprenantDto> findSanctionner(@PathVariable Long id);
+
     @GetMapping("/apprenants/{id}")
     ApprenantDto findById(@PathVariable Long id);
+
+    @GetMapping("/apprenant/code/{code}")
+    ApprenantDto findByCode(@PathVariable String code);
 
     @GetMapping("/referentiel/{id}/apprenants")
     List<ApprenantDto> findByref(@PathVariable Long id);
@@ -62,6 +68,12 @@ public interface ApprenantApi {
 
     @GetMapping("/apprenants/{id}/comments")
     List<CommentaireDto> findcommentsByApp(@PathVariable Long id);
+
+    @GetMapping("/comments")
+    List<CommentaireDto> findAllComments();
+
+    @GetMapping("/comments/{date}")
+    List<CommentaireDto> commentsByDate(@PathVariable String date);
 
     @PutMapping("/apprenants/{id}")
     ApprenantDto put(@PathVariable Long id,

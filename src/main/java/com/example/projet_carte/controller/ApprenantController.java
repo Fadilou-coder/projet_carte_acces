@@ -24,8 +24,18 @@ public class ApprenantController implements ApprenantApi {
     }
 
     @Override
+    public List<ApprenantDto> findSanctionner(Long id) {
+        return apprenantService.findSanctionner(id);
+    }
+
+    @Override
     public ApprenantDto findById(Long id) {
         return apprenantService.findById(id);
+    }
+
+    @Override
+    public ApprenantDto findByCode(String code) {
+        return apprenantService.findByCode(code);
     }
 
     @Override
@@ -69,6 +79,16 @@ public class ApprenantController implements ApprenantApi {
     @Override
     public List<CommentaireDto> findcommentsByApp(Long id) {
         return apprenantService.commentsApp(id);
+    }
+
+    @Override
+    public List<CommentaireDto> findAllComments() {
+        return apprenantService.findAllComments();
+    }
+
+    @Override
+    public List<CommentaireDto> commentsByDate(String date) {
+        return apprenantService.commentsByDate(LocalDate.parse(date));
     }
 
     @Override

@@ -10,6 +10,10 @@ import com.example.projet_carte.exception.ErrorCodes;
 import com.example.projet_carte.exception.InvalidEntityException;
 import com.example.projet_carte.model.Apprenant;
 import com.example.projet_carte.model.Personne;
+import com.example.projet_carte.repository.ApprenantRepository;
+import com.example.projet_carte.repository.PromoRepository;
+import com.example.projet_carte.repository.ReferentielRepository;
+import com.example.projet_carte.repository.UserRepository;
 import com.example.projet_carte.model.Promo;
 import com.example.projet_carte.model.Visites;
 import com.example.projet_carte.repository.*;
@@ -34,6 +38,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -58,6 +63,26 @@ public class ApprenantServiceImpl implements ApprenantService {
     }
 
     @Override
+    public List<ApprenantDto> findSanctionner(Long id) {
+        if (id == null) return null;
+        promoRepository.findById(id).orElseThrow(() ->
+            new EntityNotFoundException(
+                "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
+                ErrorCodes.PROMO_NOT_FOUND));
+        AtomicInteger nbrAbs = new AtomicInteger();
+        AtomicInteger nbrRtd = new AtomicInteger();
+        List<Apprenant> apps = new ArrayList<>();
+        apprenantRepository.findByPromoIdAndArchiveFalse(id).forEach(apprenant -> {
+            nbrAbs.set(findNbrAbscences(apprenant.getId(), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1)));
+            nbrRtd.set(findNbrRetard(apprenant.getId(), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1), LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 1, 1)));
+            if (nbrAbs.get() >= 3 || nbrRtd.get() >= 60)
+                apps.add(apprenant);
+        });
+
+        return apps.stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
     public List<ApprenantDto> findByref(Long id) {
         return apprenantRepository.findByReferentielIdAndArchiveFalse(id).stream()
                 .map(ApprenantDto::fromEntity)
@@ -73,7 +98,6 @@ public class ApprenantServiceImpl implements ApprenantService {
     public List<ApprenantDto> findByRefByPromo(Long idRef, Long idPr) {
         return apprenantRepository.findByPromoIdAndReferentielIdAndArchiveFalse(idPr, idRef).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
     }
-
     @Override
     public ApprenantDto save(String prenom, String nom, String email, String phone, String adresse, String typePiece, String sexe, String numPiece, String referentiel, String promo, String dateNaissance, String lieuNaissance, String numTuteur, MultipartFile avatar) throws IOException {
 
@@ -105,7 +129,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         if (TYPE.equals(file.getContentType())) {
             try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
                  CSVParser csvParser = new CSVParser(fileReader,
-                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
                 Iterable<CSVRecord> csvRecords = csvParser.getRecords();
                 for (CSVRecord csvRecord : csvRecords) {
                     ApprenantDto apprenantDto = new ApprenantDto(
@@ -120,8 +144,10 @@ public class ApprenantServiceImpl implements ApprenantService {
                             csvRecord.get("sexe"),
                             csvRecord.get("numPiece"),
                             null,
-                            ReferentielDto.fromEntity(referentielRepository.findByLibelle(csvRecord.get("referentiel")).get()),
-                            PromoDto.fromEntity(promoRepository.findByLibelle(csvRecord.get("promo")).get()),
+                            referentielRepository.findByLibelle(csvRecord.get("referentiel")).isPresent() ?
+                            ReferentielDto.fromEntity(referentielRepository.findByLibelle(csvRecord.get("referentiel")).get()) : null,
+                            promoRepository.findByLibelle(csvRecord.get("promo")).isPresent() ?
+                            PromoDto.fromEntity(promoRepository.findByLibelle(csvRecord.get("promo")).get()) : null,
                             LocalDate.parse(csvRecord.get("dateNaissance")),
                             csvRecord.get("lieuNaissance"),
                             csvRecord.get("numTuteur"),
@@ -204,7 +230,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         FileOutputStream fos = new FileOutputStream( convFile );
         fos.write( file.getBytes() );
         fos.close();
-        String body = "Bonjour M.(MMe) " + prenom + " " + nom + " vous trouverez ci dessous votre carte d'access. "+ System.getProperty("line.separator") + System.getProperty("line.separator") + "Cordialement";
+        String body = "Bonjour " + prenom + " " + nom + " vous trouverez ci dessous votre carte d'access. "+ System.getProperty("line.separator") + System.getProperty("line.separator") + "Cordialement";
         emailSenderService.sendEmailInlineImage("Orange Digital Center", body, email, convFile);
     }
 
@@ -217,6 +243,18 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun Apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND)
+        );
+    }
+
+    @Override
+    public ApprenantDto findByCode(String code) {
+        if (code == null) {
+            return null;
+        }
+        return apprenantRepository.findByCodeAndArchiveFalse(code).map(ApprenantDto::fromEntity).orElseThrow(() ->
+            new EntityNotFoundException(
+                "Aucun Apprenant avec le code = " + code + " ne se trouve dans la BDD",
+                ErrorCodes.APPRENANT_NOT_FOUND)
         );
     }
 
@@ -363,7 +401,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
                     Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
-        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
             return 0;
         LocalDate db = dateDebut;
         if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() < 0) {
@@ -400,7 +438,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
                     Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
-        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0)
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
             return 0;
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
@@ -432,9 +470,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
-        promo.getApprenants().forEach(apprenant -> {
-            nbr.getAndSet(nbr.get() + findNbrAbscences(apprenant.getId(), dateDebut, finalDateFin));
-        });
+        promo.getApprenants().forEach(apprenant -> nbr.getAndSet(nbr.get() + findNbrAbscences(apprenant.getId(), dateDebut, finalDateFin)));
 
         return nbr.get();
     }
@@ -451,9 +487,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         AtomicReference<Integer> nbr = new AtomicReference<>(0);
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
         LocalDate finalDateFin = dateFin;
-        promo.getApprenants().forEach(apprenant -> {
-            nbr.getAndSet(nbr.get() + findNbrRetard(apprenant.getId(), dateDebut, finalDateFin));
-        });
+        promo.getApprenants().forEach(apprenant -> nbr.getAndSet(nbr.get() + findNbrRetard(apprenant.getId(), dateDebut, finalDateFin)));
 
         return nbr.get();
     }
@@ -481,12 +515,27 @@ public class ApprenantServiceImpl implements ApprenantService {
             throw new InvalidEntityException("l'apprenant choisi n'existe pas dans la base de BDD", ErrorCodes.APPRENANT_NOT_FOUND,
                     Collections.singletonList("l'apprenant choisi n'existe pas dans la base de BDD"));
         }
+        commentaire.setDate(LocalDate.now());
         return CommentaireDto.fromEntity(commentaireRepository.save(CommentaireDto.toEntity(commentaire)));
     }
 
     @Override
     public List<CommentaireDto> commentsApp(Long id) {
         return commentaireRepository.findByApprenantId(id).stream().map(CommentaireDto::fromEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentaireDto> findAllComments() {
+        return commentaireRepository.findAll().stream()
+            .map(CommentaireDto::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentaireDto> commentsByDate(LocalDate date) {
+        return commentaireRepository.findByDate(date).stream()
+            .map(CommentaireDto::fromEntity)
+            .collect(Collectors.toList());
     }
 
     private void validation(ApprenantDto apprenantDto) {
