@@ -214,11 +214,10 @@ public class ApprenantServiceImpl implements ApprenantService {
                     }else
                         throw new InvalidEntityException("le format du fichier n'est pas bonne " , ErrorCodes.APPRENANT_NOT_VALID);
                 }
-                return apps;
-                // return apprenantRepository.saveAll(
-                //         apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
-                // ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
-
+                // return apps;
+                return apprenantRepository.saveAll(
+                        apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
+                ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
             } catch (IOException e) {
                 e.printStackTrace();
             }
