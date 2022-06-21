@@ -48,12 +48,12 @@ public class PersonneValidator {
         if (!StringUtils.hasLength(lieuNaissance)) {
             errors.add("Veuillez renseigner le lieu de naissance'");
         }
-        if (!StringUtils.hasLength(numTuteur)) {
-            errors.add("Veuillez renseigner le numero du tuteur'");
-        }
-        if (!StringUtils.hasLength(addresse)) {
-            errors.add("Veuillez renseigner l'adresse'");
-        }
+        // if (!StringUtils.hasLength(numTuteur)) {
+        //     errors.add("Veuillez renseigner le numero du tuteur'");
+        // }
+        // if (!StringUtils.hasLength(addresse)) {
+        //     errors.add("Veuillez renseigner l'adresse'");
+        // }
         if (!StringUtils.hasLength(phone)) {
             errors.add("Veuillez renseigner le numero de telephone'");
         }

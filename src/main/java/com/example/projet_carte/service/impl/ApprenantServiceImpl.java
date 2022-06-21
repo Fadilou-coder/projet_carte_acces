@@ -123,7 +123,7 @@ public class ApprenantServiceImpl implements ApprenantService {
     @Override
     public List<ApprenantDto> saveFromCsv(MultipartFile file) {
         String TYPE = "text/csv";
-        String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "TypePiece", "NumPiece", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
+        String[] HEADERs = { "Prénom", "Nom", "Email", "Téléphone", "Adresse", "TypePiece", "NumPiece", "Sexe", "Référentiel", "Promo", "DateNaissance",  "LieuNaissance", "NumTuteur"};
         List<ApprenantDto> apps = new ArrayList<>();
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (TYPE.equals(file.getContentType())) {
@@ -173,15 +173,16 @@ public class ApprenantServiceImpl implements ApprenantService {
                         if (i == 0){
                             for(int j=0;j<row.getPhysicalNumberOfCells();j++) {
                                 if (!Objects.equals(HEADERs[j], row.getCell(j).toString()))
-                                    throw new InvalidEntityException("le format du fichier n'est pas bonne", ErrorCodes.APPRENANT_NOT_VALID);
+                                    throw new InvalidEntityException("le format du fichier n'est pas bonne ", ErrorCodes.APPRENANT_NOT_VALID);
                             }
                         }else {
                             Random random = new Random();
-                            if (referentielRepository.findByLibelle(row.getCell(6).toString()).isPresent() && promoRepository.findByLibelle(row.getCell(7).toString()).isPresent()) {
-                                String code = promoRepository.findByLibelle(row.getCell(7).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000) + 1001);
+                            if (referentielRepository.findByLibelle(row.getCell(8).toString()).isPresent() && promoRepository.findByLibelle(row.getCell(9).toString()).isPresent()) {
+                                String code = promoRepository.findByLibelle(row.getCell(9).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1000) + 1001);
+
                                 while (apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()) {
-                                    code = promoRepository.findByLibelle(row.getCell(7).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
-                                }
+                                    code = promoRepository.findByLibelle(row.getCell(9).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
+                                }                      
                                 ApprenantDto apprenantDto = new ApprenantDto(
                                         null,
                                         row.getCell(0).toString(),
@@ -195,10 +196,10 @@ public class ApprenantServiceImpl implements ApprenantService {
                                         row.getCell(6).toString(),
                                         code,
                                         referentielRepository.findByLibelle(row.getCell(8).toString()).isPresent() ?
-                                                ReferentielDto.fromEntity(referentielRepository.findByLibelle(row.getCell(6).toString()).get()) : null,
+                                                ReferentielDto.fromEntity(referentielRepository.findByLibelle(row.getCell(8).toString()).get()) : null,
                                         promoRepository.findByLibelle(row.getCell(9).toString()).isPresent() ?
-                                                PromoDto.fromEntity(promoRepository.findByLibelle(row.getCell(7).toString()).get()) : null,
-                                        row.getCell(10).getLocalDateTimeCellValue().toLocalDate(),
+                                                PromoDto.fromEntity(promoRepository.findByLibelle(row.getCell(9).toString()).get()) : null,
+                                        !row.getCell(10).toString().isEmpty() ? LocalDate.parse(row.getCell(10).toString()) : null,
                                         row.getCell(11).toString(),
                                         row.getCell(12).toString(),
                                         null,
@@ -207,15 +208,16 @@ public class ApprenantServiceImpl implements ApprenantService {
                                 validation(apprenantDto);
                                 apps.add(apprenantDto);
                             }else
-                                throw new InvalidEntityException("le format du fichier n'est pas bonne : le referentiel ou la promo choisi(e) n'existe pas dans la BDD", ErrorCodes.APPRENANT_NOT_VALID);
+                                throw new InvalidEntityException("le format du fichier n'est pas bonne : le referentiel ou la promo choisi(e) n'existe pas dans la BDD: "+ row.getCell(6).toString() + " " + row.getCell(7).toString(), ErrorCodes.APPRENANT_NOT_VALID);
                         }
 
                     }else
-                        throw new InvalidEntityException("le format du fichier n'est pas bonne", ErrorCodes.APPRENANT_NOT_VALID);
+                        throw new InvalidEntityException("le format du fichier n'est pas bonne " , ErrorCodes.APPRENANT_NOT_VALID);
                 }
-                return apprenantRepository.saveAll(
-                        apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
-                ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
+                return apps;
+                // return apprenantRepository.saveAll(
+                //         apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
+                // ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -404,7 +406,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0)){
             return 0;
         }
-        
+
         LocalDate db = dateDebut;
         if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() > 0) {
             db = apprenant.getPromo().getDateDebut();
@@ -443,8 +445,12 @@ public class ApprenantServiceImpl implements ApprenantService {
 
         if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
             return 0;
+        LocalDate db = dateDebut;
+        if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() > 0) {
+            db = apprenant.getPromo().getDateDebut();
+        }
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
-        for (LocalDate i = dateDebut; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+        for (LocalDate i = db; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent()) {
                 Visites visites = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
