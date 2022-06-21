@@ -208,12 +208,12 @@ public class ApprenantServiceImpl implements ApprenantService {
                                 validation(apprenantDto);
                                 apps.add(apprenantDto);
                             }else
-                                throw new InvalidEntityException("le format du fichier n'est pas bonne : le referentiel ou la promo choisi(e) n'existe pas dans la BDD: "+ row.getCell(6).toString() + " " + row.getCell(7).toString(), ErrorCodes.APPRENANT_NOT_VALID);
+                                throw new InvalidEntityException("le format du fichier n'est pas bonne : le referentiel ou la promo choisi(e) n'existe pas dans la BDD: "+ row.getCell(8).toString() + " " + row.getCell(9).toString(), ErrorCodes.APPRENANT_NOT_VALID);
                         }
 
                     }else
                         throw new InvalidEntityException("le format du fichier n'est pas bonne " , ErrorCodes.APPRENANT_NOT_VALID);
-                }
+                } 
                 return apprenantRepository.saveAll(
                         apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
                 ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
