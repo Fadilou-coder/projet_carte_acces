@@ -397,13 +397,12 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
-        if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
-            throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
-                    Collections.singletonList("La date de debut est plus avanceée que la date fin"));
-
         if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0)){
             return 0;
         }
+        if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
+            throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
+                    Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
         LocalDate db = dateDebut;
         if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() > 0) {
@@ -437,12 +436,12 @@ public class ApprenantServiceImpl implements ApprenantService {
                 new EntityNotFoundException(
                         "Aucun apprenant avec l'ID = " + id + " ne se trouve dans la BDD",
                         ErrorCodes.APPRENANT_NOT_FOUND));
+        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
+            return 0;
         if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
                     Collections.singletonList("La date de debut est plus avanceée que la date fin"));
 
-        if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0))
-            return 0;
         LocalDate db = dateDebut;
         if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() > 0) {
             db = apprenant.getPromo().getDateDebut();
