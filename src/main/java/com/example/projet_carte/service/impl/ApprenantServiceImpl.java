@@ -410,7 +410,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         }
 
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
-    for (LocalDate i = db; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+    for (LocalDate i = db; i.getDayOfMonth() < Duration.between(db.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();  i = i.plusDays(1)){
             if (!visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent())
                 nbr++;
@@ -447,7 +447,7 @@ public class ApprenantServiceImpl implements ApprenantService {
             db = apprenant.getPromo().getDateDebut();
         }
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
-        for (LocalDate i = db; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
+        for (LocalDate i = db; i.getDayOfMonth() < Duration.between(db.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();  i = i.plusDays(1)){
             if (visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
                     i.plusDays(1).atStartOfDay(), apprenant, null).isPresent()) {
                 Visites visites = visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
