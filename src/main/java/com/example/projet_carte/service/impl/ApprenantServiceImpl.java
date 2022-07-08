@@ -182,7 +182,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
                                 while (apprenantRepository.findByCodeAndArchiveFalse(code).isPresent()) {
                                     code = promoRepository.findByLibelle(row.getCell(9).toString()).get().getDateDebut().toString().substring(0, 4) + (random.nextInt(9999 - 1001) + 1001);
-                                }                      
+                                }
                                 ApprenantDto apprenantDto = new ApprenantDto(
                                         null,
                                         row.getCell(0).toString(),
@@ -213,7 +213,7 @@ public class ApprenantServiceImpl implements ApprenantService {
 
                     }else
                         throw new InvalidEntityException("le format du fichier n'est pas bonne " , ErrorCodes.APPRENANT_NOT_VALID);
-                } 
+                }
                 return apprenantRepository.saveAll(
                         apps.stream().map(ApprenantDto::toEntity).collect(Collectors.toList())
                 ).stream().map(ApprenantDto::fromEntity).collect(Collectors.toList());
@@ -399,8 +399,8 @@ public class ApprenantServiceImpl implements ApprenantService {
                         ErrorCodes.APPRENANT_NOT_FOUND));
         if (Duration.between(dateDebut.atStartOfDay(), dateFin.atStartOfDay()).toDays() < 0)
             throw new InvalidEntityException("Verifier les dates choisis", ErrorCodes.APPRENANT_NOT_VALID,
-                    Collections.singletonList("La date de debut est plus avanceée que la date fin"));
-      
+                    Collections.singletonList("La date de debut est plus avanceée que la date fin: DateDebut: " + dateDebut.atStartOfDay() + " " + dateFin.atStartOfDay()));
+
         if (Duration.between(dateDebut.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0 || (apprenant.getPromo().getDateFin() != null && Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateFin().atStartOfDay()).toDays() < 0)){
             return 0;
         }
@@ -409,7 +409,7 @@ public class ApprenantServiceImpl implements ApprenantService {
         if (Duration.between(dateDebut.atStartOfDay(), apprenant.getPromo().getDateDebut().atStartOfDay()).toDays() > 0) {
             db = apprenant.getPromo().getDateDebut();
         }
-       
+
         if (Duration.between(dateFin.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 0) dateFin = LocalDate.now().plusDays(1);
     for (LocalDate i = db; i.getDayOfMonth() < dateFin.getDayOfMonth();  i = i.plusDays(1)){
             if (!visiteRepository.findByDateEntreeBetweenAndApprenantAndVisiteur(i.atStartOfDay(),
