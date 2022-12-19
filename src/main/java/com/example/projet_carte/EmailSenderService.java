@@ -36,8 +36,8 @@ public class EmailSenderService {
 
     public void sendEmailInlineImage(String subject, String message, String to, File fileatach)
     {
-        String senderEmail = "fayeomzolive@gmail.com"; // your gmail email id
-        String senderPassword = "dnwicurnxneqqofi"; // your gmail id password
+        String senderEmail = "syfadilou3@gmail.com"; // your gmail email id
+        String senderPassword = "poocfadqzyqkrtlj"; // your gmail id password
 
         //Properties class enables us to connect to the host SMTP server
         Properties properties = new Properties();
